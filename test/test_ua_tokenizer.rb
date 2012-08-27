@@ -34,6 +34,12 @@ class TestUaTokenizer < Test::Unit::TestCase
     expected = ["cpu", "cpu_iphone", "iphone", "iphone_os", "os", "5.1",
                 "like", "like_mac", "mac", "mac_os", "os", "os_x", "x"]
     assert_equal expected, tokens
+
+    tokens = UATokenizer.tokenize("FBForIPhone")
+    assert_equal ["fb", "fb_iphone", "iphone"], tokens
+
+    tokens = UATokenizer.tokenize("CriOS")
+    assert_equal ["crios"], tokens
   end
 
 
@@ -85,6 +91,12 @@ class TestUaTokenizer < Test::Unit::TestCase
 
     tokens = UATokenizer.tokenize("Android2.3.5")
     assert_equal ["android", "2.3.5"], tokens
+  end
+
+
+  def test_tokenize_nokia
+    tokens = UATokenizer.tokenize("MeeGo NokiaN9")
+    assert_equal ["meego", "meego_nokia", "nokia", "nokia_n9", "n9"], tokens
   end
 
 
@@ -146,6 +158,9 @@ class TestUaTokenizer < Test::Unit::TestCase
   def test_tokenize_lg
     tokens = UATokenizer.tokenize("LG-KU990i")
     assert_equal ["lg", "lg_ku990i", "ku990i"], tokens
+
+    tokens = UATokenizer.tokenize("LGC300")
+    assert_equal ["lg", "lg_c300", "c300"], tokens
 
     tokens = UATokenizer.tokenize("LGPlayer")
     assert_equal ["lg", "lg_player", "player"], tokens

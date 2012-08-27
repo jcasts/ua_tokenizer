@@ -3,7 +3,11 @@ class UATokenizer
 
   TOKEN_MAPS = {
     'black_berry' => 'blackberry',
+    'crios'       => 'chrome',
+    'fb'          => 'facebook',
     'lge'         => 'lg',
+    'mot'         => 'motorolla',
+    's40'         => 'series_40',
     's60'         => 'series_60',
     'sam'         => 'samsung',
     'symb'        => 'symbian',
@@ -11,14 +15,15 @@ class UATokenizer
 
   COMMON_TOKENS = %w{
     version profile configuration mobile untrusted browser os
-    cpu x like web phone like
+    cpu x like web phone like for
   }
 
   VERSION_MATCH = /^(v?(\d+\.)+\d+|v\d+)$/
 
   TOKEN_MATCHERS = {
+    :camel0  => /([A-Z\d])[Ff]or([A-Z]+[a-z]+)/,
     :camel1  => /([a-z]{3,})([\dA-Z])/,
-    :camel2  => /([A-Z]{2,})([a-z]{1,2}[^a-z]|[A-Z][a-z]{2,})/,
+    :camel2  => /([A-Z]{2,})([a-z]{1,2}[^a-z]|[A-Z][a-z]{2,}|[A-Z][0-9]{2,})/,
     :suffix  => /(\d)([a-zA-Z]+\d)/,
     :nprefix => /([A-Z]{3,})(\d)/
   }
@@ -100,6 +105,8 @@ class UATokenizer
     tokens
   end
 
+
+  attr_accessor :localization, :version, :screen #, :platform
 
   ##
   # Create a new UATokenizer instance from parsed User-Agent data.
