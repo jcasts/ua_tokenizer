@@ -1,0 +1,8 @@
+.autotest
+History.txt
+Manifest.txt
+README.txt
+Rakefile
+bin/ua_tokens
+lib/ua_tokenizer.rb
+test/test_ua_tokenizer.rb

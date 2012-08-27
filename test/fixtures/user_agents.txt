@@ -1,0 +1,89 @@
+Mozilla/5.0 (BlackBerry; U; BlackBerry 9900; en-GB) AppleWebKit/534.11+ (KHTML, like Gecko) Version/7.0.0.503 Mobile Safari/534.11+
+Mozilla/5.0 (Android; Mobile; rv:13.0) Gecko/13.0 Firefox/13.0 Fennec/13.0
+Mozilla/5.0 (S60V5; U; Pt-br; Nokia5233)/UC Browser8.2.0.132/50/355/UCWEB Mobile
+Mozilla/5.0 (SAMSUNG; SAMSUNG-GT-S7250D/S7250DXXKK1; U; Bada/2.0; ru-ru) AppleWebKit/534.20 (KHTML, like Gecko) Dolfin/3.0 Mobile HVGA SMM-MMS/1.2.0 OPN-B
+Mozilla/5.0 (SAMSUNG; SAMSUNG-GT-S5750E/S5750EZTKF1; U; Bada/1.0; zh-cn) AppleWebKit/533.1 (KHTML, like Gecko) Dolfin/2.0 Mobile WQVGA SMM-MMS/1.2.0 OPN-B
+Mozilla/5.0 (SAMSUNG; SAMSUNG-GT-S5750E/S5750EPOKA3; U; Bada/1.0; fr-fr) AppleWebKit/533.1 (KHTML, like Gecko) Dolfin/2.0 Mobile WQVGA SMM-MMS/1.2.0 NexPlayer/3.0 profile/MIDP-2.1 configuration/CLDC-1.1 OPN-B
+Mozilla/5.0 (SAMSUNG; SAMSUNG-GT-S8500-VODAFONE/S8500BULA3; U; Bada/2.0; es-es) AppleWebKit/534.20 (KHTML, like Gecko) Dolfin/3.0 Mobile WVGA SMM-MMS/1.2.0 OPN-B
+
+Mozilla/5.0 (Series40; Nokia201/11.21; Profile/MIDP-2.1 Configuration/CLDC-1.1) Gecko/20100401 S40OviBrowser/2.0.2.68.14
+Mozilla/5.0 (Symbian/3; Series60/5.2 Nokia500/010.032; Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/533.4 (KHTML, like Gecko) NokiaBrowser/7.3.1.37 Mobile Safari/533.4 3gpp-gba
+Mozilla/5.0 (SymbianOS/9.2; U; Series60/3.1 NokiaE63-1/510.21.010; Profile/MIDP-2.0 Configuration/CLDC-1.1 ) AppleWebKit/413 (KHTML, like Gecko) Safari/413
+Mozilla/5.0 (Vodafone/1.0/LG-GS290/V10d Browser/Obigo-Q7.3 MMS/LG-MMS-V1.0/1.2 MediaPlayer/LGPlayer/1.0 Java/ASVM/1.1 Profile/MIDP-2.1 Configuration/CLDC-1.1)
+Mozilla/5.0 (webOS/1.4.5; U; en-US) AppleWebKit/532.2 (KHTML, like Gecko) Version/1.0 Safari/532.2 Pre/1.0
+Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.79 Safari/537.1
+Mozilla/5.0 (Windows NT 5.1; rv:12.0) Gecko/20100101 Firefox/12.0
+Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.1.6) Gecko/20091201 YFF35 Firefox/3.5.3 (de) (TL-FF) (.NET CLR 3.5.30729)
+Mozilla/5.0 (iPhone; U; CPU iPhone OS 5_1 like Mac OS X; fr_FR) AppleWebKit (KHTML, like Gecko) Mobile [FBAN/FBForIPhone;FBAV/4.1.1;FBBV/4110.0;FBDV/iPhone2,1;FBMD/iPhone;FBSN/iPhone OS;FBSV/5.1;FBSS/1; FBCR/OrangeFrance;FBID/phone;FBLC/fr_FR;FBSF/1.0]
+Mozilla/5.0 (iPad; U; CPU OS 3_2_1 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B405 Safari/531.21.10
+Mozilla/5.0 (iPhone; U; CPU iPhone OS 5_1 like Mac OS X; pt-br) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/19.0.1084.60 Mobile/9B179 Safari/7534.48.3
+Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0; NOKIA; Lumia 710; Orange)
+Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 2.0.50727; Media Center PC 6.0)
+Mozilla/5.0 (X11; Linux i686; U; en-US) Gecko/20081217 Vision-Browser/8.1 301x200 LG VN530
+NetFront/3.5.1(BREW 3.1.5; U; en-us; SAMSUNG; NetFront/3.1.5/WAP) Sprint M380 MMP/2.0 Profile/MIDP-2.1 Configuration/CLDC-1.1
+Nokia1680c-2/2.0 (05.61) Profile/MIDP-2.1 Configuration/CLDC-1.1
+Nokia200/2.0 (10.58) Profile/MIDP-2.1 Configuration/CLDC-1.1 Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2;.NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; InfoPath.2)
+Nokia200/2.0 (10.58) Profile/MIDP-2.1 Configuration/CLDC-1.1 Mozilla/5.0 (Java; U; en-us; nokia200) UCBrowser8.4.0.159/70/352/UCWEB Mobile
+Nokia2700c-2/2.0 (09.98) Profile/MIDP-2.1 Configuration/CLDC-1.1 Opera/9.60 (J2ME/MIDP;Opera Mini/4.2.13337Mod.by.Dante./503; U; en)Presto/2.2.0 UNTRUSTED/1.0
+Nokia5300/2.0 (07.20) Profile/MIDP-2.0 Configuration/CLDC-1.1 Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2;.NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; InfoPath.2) UCBrowser8.4.0.159/69/352 UNTRUSTED/1.0
+NokiaC2-03/2.0 (07.48) Profile/MIDP-2.1 Configuration/CLDC-1.1 Mozilla/5.0 (Java; U; Id; nokiac2-03) UCBrowser8.4.0.159/70/352/UCWEB Mobile
+Opera/8.01 (J2ME/MIDP; Opera Mini/3.1.9427/1724; es; U; ssr)
+Opera/9.10 (Nintendo Wii; U; ; 1621; en)
+Opera/9.50 (J2ME/MIDP; Opera Mini/5.21525/27.1659; U; en)
+Opera/9.80 (S60; SymbOS; Opera Mobi/498; U; tr) Presto/2.4.18 Version/10.00
+Opera/9.50 (Nintendo DSi; Opera/483; U; en-US)
+Opera/9.5 (Microsoft Windows; Windows CE; Opera Mobi/9.5; U; en) Samsung-SCHI910 PPC 240x400
+Opera/9.5 (Microsoft Windows; Windows CE; Opera Mobi/9.5; U; en) 480x800 SAMSUNG SCH-i920 PPC
+PalmCentro/v0001 Mozilla/4.0 (compatible; MSIE 6.0; Windows 98; PalmSource/Palm-D061; Blazer/4.5) 16;320x320
+Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0; SAMSUNG; SGH-i917)
+Mozilla/5.0 (compatible; Teleca Q7; Brew 3.1.5; U; en) 240X400 LGE VX9700
+SAMSUNG-GT-B5722/B5722JVJK1 NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1
+SAMSUNG-GT-C3303i/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 UP.Browser/6.2.3.3.c.1.102 (GUI) MMP/2.0 Untrusted/1.0
+SAMSUNG-GT-S3650/1.0 SHP/VPP/R5 Jasmine/1.0 Nextreaming SMM-MMS/1.2.0 profile/MIDP-2.1 configuration/CLDC-1.1
+SAMSUNG-GT-S5250/S5250BWJI5 Bada/1.0 AppleWebKit/533.1 Dolfin/2.0 Mobile NexPlayer/3.0 SMM-MMS/1.2.0 profile/MIDP-2.1 configuration/CLDC-1.1 OPN-B
+SAMSUNG-GT-S5620-ORANGE/S5620BVJC6 SHP/VPP/R5 Dolfin/1.5 Nextreaming SMM-MMS/1.2.0 profile/MIDP-2.1 configuration/CLDC-1.1
+SonyEricssonCK15i/R3AC020 TelecaBrowser/Q07C1-1 Profile/MIDP-2.0 Configuration/CLDC-1.1
+SonyEricssonJ105i/R1HA Browser/NetFront/3.4 Profile/MIDP-2.1 Configuration/CLDC-1.1 JavaPlatform/JP-8.4.5
+SonyEricssonU5i/R2AA; Mozilla/5.0 (SymbianOS/9.4; U; Series60/5.0 Profile/MIDP-2.1 Configuration/CLDC-1.1 model-orange) AppleWebKit/525 (KHTML, like Gecko) Version/3.0 Safari/525
+PantechP7040/JLUS04042011; Mozilla/5.0 (Profile/MIDP-2.0 Configuration/CLDC-1.1; Opera Mini/att/4.2.16479; U; es) Opera 9.50
+
+T23 WIFI Duo/MTKRelease/2011/07/01Browser/MAUIProfile/MIDP-2.0Configuration/CLDC-1.0
+T58 WAP Browser
+Treo800w/v0100 Mozilla/4.0 (compatible; MSIE 4.01; Windows CE, PPC; 320x320) (compatible; MSIE 6.0; Windows CE; IEMobile 7.11)
+POLARIS/6.01 (BREW 3.1.5; U; en-us; LG; LX370; POLARIS/6.01/AMB) MMP/2.0 Profile/MIDP-2.1 Configuration/CLDC-1.1
+sam375/1.0[TF268435460214674193000000014783318126] UP.Browser/6.2.3.8 (GUI) MMP/2.0 Profile/MIDP-2.0 Configuration/CLDC-1.1
+sam-r360 UP.Browser/6.2.3.8 (GUI) MMP/2.0
+SAMSUNG-GT-B5310/B5310MBJF1 SHP/VPP/R5 Dolfin/1.5 Nextreaming SMM-MMS/1.2.0 profile/MIDP-2.1 configuration/CLDC-1.1
+r355[TF268435459011868173000000013368232976] UP.Browser/6.2.3.8 (GUI) MMP/2.0
+Vodafone/1.0/LG-KU990i/V10c Browser/Obigo-Q05A/3.6 MMS/LG-MMS-V1.0/1.2 Java/ASVM/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1
+WebWatcher1.35
+XV6975 Opera/9.50 (Windows NT  5.1; U; en)
+ZTE-F160(Brazil_VIVO)/1.0 NetFront/3.5 QTV5.1 Profile/MIDP-2.0 Configuration/CLDC-1.1
+ZTE-Sydney-Orange/EFS-EE-ORG-P107A20V1.0.5 Obigo/Q03C Profile/MIDP-2.0 Configuration/CLDC-1.1
+ZTE-Jack 3G-Orange/1.0 NetFront/3.5 QTV5.1 Profile/MIDP-2.1 Configuration/CLDC-1.1
+Panama-orange/Obigo Browser/Q05A Browser/Q03C MMS/1.0/MIDP-2.0 Configuration/CLDC-1.1
+
+Twitter/2.1.1 CFNetwork/454.12.4 Darwin/10.8.0 (i386) (MacBook4%2C1)
+Twitter/3.3.5 CFNetwork/485.13.9 Darwin/11.0.0
+TwitterAndroid/2.0.2 (129) Ally/8 (LGE;aloha;verizon;aloha;0)
+TwitterAndroid/2.0.2 (128) DROIDX/10 (motorola;cdma_shadow;verizon;shadow_vzw;0)
+TwitterAndroid/3.3.1 (169) HTC Sensation Z710e/15 (HTC;pyramid;vodafone_uk;htc_pyramid;1)
+TwitterAndroid/2.1.2 (134) SPH-D700/10 (Samsung;SPH-D700;sprint;SPH-D700;0)
+JUC(Linux;U;Android2.3.5;Zh_cn;HTC Desire HD A9191;480*800;)UCWEB7.8.0.95/139/355
+KWC-Rio/ABY1009 UP.Browser/7.2.7.2.562 (GUI) MMP/2.0
+HuaweiU3100/B000 Browser/Obigo-Browser/Q05A MMS/Obigo-MMS/Q05A SyncML/HW-SyncML/1.0 Java/HWJa/2.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 Player/QTV-Player/5.3
+HTC_Touch_HD_T8282 Mozilla/4.0 (compatible; MSIE 4.01; Windows CE; PPC)/UC Browser7.8.0.95/31/352
+HTC-F5151/2.18.502.0 Mozilla/5.0 (BMP; U; en) AppleWebKit/530.8 (KHTML, like Gecko) OBIGO/W10 Safari/530.8
+HPiPAQ910/1.0/Mozilla/4.0 (compatible; MSIE 6.0; Windows CE; IEMobile 7.11) (PPC; 320x240)
+gt-s5230/UC Browser7.7.1.88/69/444 UNTRUSTED/1.0
+Dorado WAP-Browser/1.0.0
+DoCoMo/2.0 N905i(c100;TB;W24H16) (compatible; Googlebot-Mobile/2.1; +http://www.google.com/bot.html)
+Cricket-A310/1.0 UP.Browser/6.3.0.7 (GUI) MMP/2.0
+CrowdCompass/SWC-2012/2.2 Apple/iPad/5.1
+curl/7.18.2 (x86_64-pc-linux-gnu) libcurl/7.18.2 OpenSSL/0.9.8g zlib/1.2.3.3 libidn/1.8 libssh2/0.18
+BlackBerry9550/5.0.0.550 Profile/MIDP-2.1 Configuration/CLDC-1.1 VendorID/303
+ASTRO36_TD/v3 MAUI/10A1032MP_ASTRO_W1052 Release/31.12.2010 Browser/Opera Profile/MIDP-2.0 Configuration/CLDC-1.1 Sync/SyncClient1.1 Opera/9.80 (MTK; U; es-ES) Presto/2.5.28 Version/10.10
+Alcatel-OT-807A/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 ObigoInternetBrowser/Q05A
+ALCATEL_one_touch_506A/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 ObigoInternetBrowser/Q03C
+Alcatel-OT-807A/1.0 Profile/MIDP-2.0 Configuration/CLDC-1.1 ObigoInternetBrowser/Q05A
+Apache-HttpClient/UNAVAILABLE (java 1.4)
