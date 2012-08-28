@@ -18,7 +18,9 @@ class UATokenizer
     cpu x like web phone like for
   }
 
-  VERSION_MATCH = /^(v?(\d+\.)+\d+|v\d+)$/
+  MAX_TOKEN_LENGTH = 25
+
+  VERSION_MATCH = /^(v?(\d+\.)+\d+|v\d+)$/i
 
   TOKEN_MATCHERS = {
     :camel0  => /([A-Z\d])[Ff]or([A-Z]+[a-z]+)/,
@@ -27,6 +29,9 @@ class UATokenizer
     :suffix  => /(\d)([a-zA-Z]+\d)/,
     :nprefix => /([A-Z]{3,})(\d)/
   }
+
+  SEC_MATCHER = /(?:^|\W)([NUI])(\W|$)/
+  LAN_MATCHER = /(?:^|\W)([a-z]{2,3})(?:[\-_]([a-z]{2,3}))?(\W|$)/i
 
   DEVICE_MATCHER = /(?:[a-z]([A-Z]{0,3})|[-_ ]([a-zA-Z]{0,3}))(\d+[a-z]{0,2})/
 
@@ -43,17 +48,54 @@ class UATokenizer
   # Extracts a Product/Version pair from a given ProductToken.
   # Removes common tokens.
   #   UATokenizer.parse_product "Treo800w/v0100"
-  #   #=> {["treo", "treo_800w", "800w"] => "v0100"}
+  #   #=> {"treo" => "v0100", "treo_800w" => "v0100", "800w" => "v0100"}
   #
   #   UATokenizer.parse_product "Vodafone/1.0/LG-KU990i/V10c"
-  #   #=> {["vodafone"] => "1.0", ["lg", "lg_ku990i", "ku990i"] => "v10c"}
+  #   #=> {"vodafone" => "1.0", "lg" => "v10c", "lg_ku990i" => "v10c", "ku990i" => "v10c"}
   #
   #   UATokenizer.parse_product "Browser/Obigo-Q05A/3.6"
-  #   #=> {["obigo", "obigo_q05a", "q05a"] => "3.6"}
+  #   #=> {"obigo" => "3.6", "obigo_q05a" => "3.6", "q05a" => "3.6"}
 
   def self.parse_product str
     parts = str.split("/")
-    
+
+    version     = nil
+    tmp_version = nil
+
+    out    = {}
+    tokens = []
+
+    parts.each_with_index do |part, i|
+      last_of_many = parts.length > 1 && i+1 == parts.length
+
+      if version && !last_of_many
+        version &&= version.downcase
+        tokens.each{|t| out[t] = version || true }
+        tokens  = []
+        version = nil
+      end
+
+      tokenize(part) do |t|
+        next if COMMON_TOKENS.include?(t)   ||
+                t.length > MAX_TOKEN_LENGTH ||
+                t =~ /^\d+$/
+
+        t = TOKEN_MAPS[t] || t
+
+        version = t and next if !version && t =~ VERSION_MATCH
+        tokens << t
+
+        t
+      end unless last_of_many
+
+      version = part and next if
+        (!version && last_of_many) || part =~ VERSION_MATCH
+    end
+
+    version &&= version.downcase
+    tokens.each{|t| out[t] = version || true }
+
+    out
   end
 
 
@@ -84,15 +126,17 @@ class UATokenizer
     2.times{ str.gsub!(/(\d)_(\d)/, '\1.\2') } # serialize version
     TOKEN_MATCHERS.each{|k, regex| str.gsub!(regex, '\1_\2') }
 
-    parts = str.downcase.split(/[_\s\-\/]/)
+    parts = str.downcase.split(/[_\s\-\/;]/)
     tokens = []
 
     last = nil
     parts.each do |t|
+      next unless t && !t.empty?
       t.gsub!(/([a-z])\W([a-z])/, '\1_\2')
       t1 = block_given? ? yield(t) : t
 
-      if last && last !~ VERSION_MATCH && t !~ VERSION_MATCH
+      if last && t !~ VERSION_MATCH && last !~ VERSION_MATCH
+        last = last.split("_", 2).last
         nt = "#{last}_#{t1 || t}"
         nt = yield nt if block_given?
         tokens << nt if nt
