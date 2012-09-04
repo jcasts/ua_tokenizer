@@ -1,26 +1,26 @@
-= ua_tokens
+= UA Tokenizer
 
-* FIX (url)
+* http://yaks.me/ua_tokenizer
 
 == DESCRIPTION:
 
-FIX (describe your package)
-
-== FEATURES/PROBLEMS:
-
-* FIX (list of features or problems)
+Parse UserAgent strings into logical parts.
 
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+  ua = "Mozilla/5.0 (Series40; NokiaC3-00/03.35; Profile/MIDP-2.1 Configuration/CLDC-1.1) Gecko/20100401 S40OviBrowser/2.0.2.68.14"
 
-== REQUIREMENTS:
+  tokens = UATokenizer.parse ua
+  assert_equal "cldc-1.1", tokens[:configuration]
+  assert_equal "03.35",    tokens[:nokia]
+  assert_equal "03.35",    tokens[:nokia_c3]
 
-* FIX (list of requirements)
+  assert_equal "2.0.2.68.14", tokens[:series_40]
+  assert_equal "2.0.2.68.14", tokens[:ovi_browser]
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+* gem install ua_tokenizer
 
 == DEVELOPERS:
 
@@ -35,7 +35,7 @@ and generate the RDoc.
 
 (The MIT License)
 
-Copyright (c) 2012 FIX
+Copyright (c) 2012 Jeremie Castagna
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
