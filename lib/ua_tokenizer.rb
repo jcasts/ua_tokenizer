@@ -23,8 +23,10 @@ class UATokenizer
 
   TOKEN_MATCHERS = {
     :camel0  => /([A-Z\d])[Ff]or([A-Z]+[a-z]+)/,
-    :camel1  => /([a-z]{3,})([\dA-Z])/,
-    :camel2  => /([A-Z]{2,})([a-z]{1,2}[^a-z]|[A-Z][a-z]{2,}|[A-Z][0-9]{2,})/,
+    :camel1  => /([A-Z]\d+)([A-Z][a-z])/,
+    :camel2  => /(_[A-Z][a-z]+)([A-Z][a-z])/,
+    :camel3  => /([a-z]{3,})([\dA-Z])/,
+    :camel4  => /([A-Z]{2,})([a-z]{1,2}[^a-z]|[A-Z][a-z]{2,}|[A-Z][0-9]{2,})/,
     :suffix  => /(\d)([a-zA-Z]+\d)/,
     :nprefix => /([A-Z]{3,})(\d)/
   }
@@ -34,8 +36,8 @@ class UATokenizer
   SCR_MATCHER = /(\d{2,4}[xX*]\d{2,4})/
 
   DATE_MATCHER          = %r{(^|\D)(\d{4})/(\d{2})/(\d{2})(\D|$)}
-  NOSPACE_MATCHER       = %r{([^\s]+/){4,}}
-  NOSPACE_DELIM_MATCHER = /([0-9A-Z])([A-Z][a-z])/
+  NOSPACE_MATCHER       = %r{\)/[a-zA-Z]|([^\s]+/){4,}}
+  NOSPACE_DELIM_MATCHER = %r{([0-9A-Z])([A-Z][a-z])|\)/}
   UA_DELIM_MATCHER      = %r{(/(?:[^\s;])+|[\)\]])[\s;]+(\w)}
   UA_SPLIT_MATCHER      = /\s*[;()\[\],]+\s*/
 
@@ -124,7 +126,7 @@ class UATokenizer
 
       if version && !last_of_many
         version &&= version.downcase
-        tokens.each{|t| out[t] = version || true }
+        tokens.each{|t| out[t] = version || out[t] || true }
         tokens  = []
         version = nil
       end
@@ -147,7 +149,7 @@ class UATokenizer
     end
 
     version &&= version.downcase
-    tokens.each{|t| out[t] = version || true }
+    tokens.each{|t| out[t] = version || out[t] || true }
 
     out
   end
@@ -204,14 +206,17 @@ class UATokenizer
   end
 
 
-  attr_accessor :localization, :version, :screen #, :platform
+  attr_accessor :localization, :security, :screen
 
   ##
   # Create a new UATokenizer instance from parsed User-Agent data.
 
   def initialize data, meta=nil
-    @meta   = meta || {}
-    @tokens = data
+    meta        ||= {}
+    @screen       = meta[:screen]
+    @localization = meta[:localization]
+    @security     = meta[:security]
+    @tokens       = data
   end
 
 
@@ -219,7 +224,7 @@ class UATokenizer
   # Returns true-ish if the given key matches a User-Agent token.
 
   def [] key
-    @tokens[key]
+    @tokens[key.to_s.downcase]
   end
 
 

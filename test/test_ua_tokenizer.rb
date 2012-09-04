@@ -335,6 +335,19 @@ class TestUaTokenizer < Test::Unit::TestCase
   end
 
 
+  def test_parse_product_series40_j2me
+    map = UATokenizer.parse_product "S40OviBrowser/2.0.2.68.14"
+    expected = {
+      "series_40"=>"2.0.2.68.14",
+      "ovi"=>"2.0.2.68.14",
+      "40_ovi"=>"2.0.2.68.14",
+      "ovi_browser"=>"2.0.2.68.14"
+    }
+
+    assert_equal expected, map
+  end
+
+
   def test_split
     arr = UATokenizer.split "sam375/1.0[TF268435460214674193000000014783318126]\
  UP.Browser/6.2.3.8 (GUI) MMP/2.0 Profile/MIDP-2.0 Configuration/CLDC-1.1"
@@ -356,6 +369,19 @@ Configuration/CLDC-1.0"
 
     assert_equal expected, arr
   end
+
+
+  def test_split_bad_spaces
+    ua = "HTC_Touch_HD_T8282 Mozilla/4.0 (compatible; MSIE 4.01; Windows CE;\
+ PPC)/UC Browser7.8.0.95/31/352"
+    arr = UATokenizer.split ua
+
+    expected = %w{HTC_Touch_HD_T8282\ Mozilla/4.0 compatible MSIE\ 4.01
+      Windows\ CE PPC UC\ Browser7.8.0.95/31/352}
+
+    assert_equal expected, arr
+  end
+
 
 
   def test_split_JUC
@@ -407,5 +433,60 @@ Opera Mobi/9.5; U; en) Samsung-SCHI910 PPC 240x400"
 
     arr = UATokenizer.split "T58 WAP Browser"
     assert_equal ["T58 WAP Browser"], arr
+  end
+
+
+  def test_parse_samsung_dolfin
+    ua = "Mozilla/5.0 (SAMSUNG; SAMSUNG-GT-S7250D/S7250DXXKK1; U; Bada/2.0; ru-ru) \
+AppleWebKit/534.20 (KHTML, like Gecko) Dolfin/3.0 Mobile HVGA SMM-MMS/1.2.0 OPN-B"
+
+    tokens = UATokenizer.parse ua
+
+    assert_equal "U",     tokens.security
+    assert_equal "ru-ru", tokens.localization
+    assert_nil   tokens.screen
+
+    assert_equal "5.0",         tokens[:mozilla]
+    assert_equal "2.0",         tokens["bada"]
+    assert_equal "2.0",         tokens[:bada]
+
+    assert_equal "534.20",      tokens[:apple]
+    assert_equal "534.20",      tokens[:webkit]
+    assert_equal "534.20",      tokens[:apple_webkit]
+
+    assert_equal true,          tokens[:khtml]
+    assert_equal true,          tokens[:like_gecko]
+    assert_equal true,          tokens[:gecko]
+
+    assert_equal "s7250dxxkk1", tokens[:samsung]
+    assert_equal "s7250dxxkk1", tokens[:GT_S7250D]
+  end
+
+
+  def test_parse_series60_uc
+    ua = "Mozilla/5.0 (S60V5; U; Pt-br; Nokia5233)/UC Browser8.2.0.132/50/355/\
+UCWEB Mobile"
+
+    tokens = UATokenizer.parse ua
+
+    assert_equal "5.0",       tokens[:mozilla]
+    assert_equal "v5",        tokens[:series_60]
+    assert_equal "8.2.0.132", tokens[:uc_browser]
+    assert_equal true,        tokens[:nokia]
+    assert_equal true,        tokens[:nokia_5233]
+  end
+
+
+  def test_parse_series40_j2me
+    ua = "Mozilla/5.0 (Series40; NokiaC3-00/03.35; Profile/MIDP-2.1 \
+Configuration/CLDC-1.1) Gecko/20100401 S40OviBrowser/2.0.2.68.14"
+
+    tokens = UATokenizer.parse ua
+    assert_equal "cldc-1.1", tokens[:configuration]
+    assert_equal "03.35",    tokens[:nokia]
+    assert_equal "03.35",    tokens[:nokia_c3]
+
+    assert_equal "2.0.2.68.14", tokens[:series_40]
+    assert_equal "2.0.2.68.14", tokens[:ovi_browser]
   end
 end
