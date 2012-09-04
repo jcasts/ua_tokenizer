@@ -489,4 +489,48 @@ Configuration/CLDC-1.1) Gecko/20100401 S40OviBrowser/2.0.2.68.14"
     assert_equal "2.0.2.68.14", tokens[:series_40]
     assert_equal "2.0.2.68.14", tokens[:ovi_browser]
   end
+
+
+  def test_token_has_true
+    ua = "Mozilla/5.0 (S60V5; U; Pt-br; Nokia5233)/UC Browser8.2.0.132/50/355/\
+UCWEB Mobile"
+
+    tokens = UATokenizer.parse ua
+
+    assert_equal true, tokens.has?(:mozilla)
+    assert_equal true, tokens.has?(:mozilla, "5.0")
+    assert_equal true, tokens.has?(:mozilla, "= 5.0")
+    assert_equal true, tokens.has?(:mozilla, "==5.0")
+    assert_equal true, tokens.has?(:mozilla, ">=5.0")
+    assert_equal true, tokens.has?(:mozilla, "<=5.0")
+    assert_equal true, tokens.has?(:mozilla, "<=6.0")
+    assert_equal true, tokens.has?(:mozilla, "<6.0")
+    assert_equal true, tokens.has?(:mozilla, ">4.9")
+    assert_equal true, tokens.has?(:uc_browser, ">8.2.0")
+  end
+
+
+  def test_token_has_false
+    ua = "Mozilla/5.0 (S60V5; U; Pt-br; Nokia5233)/UC Browser8.2.0.132/50/355/\
+UCWEB Mobile"
+
+    tokens = UATokenizer.parse ua
+
+    assert_equal false, tokens.has?(:safari)
+    assert_equal false, tokens.has?(:mozilla, "4.0")
+    assert_equal false, tokens.has?(:mozilla, "= 4.0")
+    assert_equal false, tokens.has?(:mozilla, "==4.0")
+    assert_equal false, tokens.has?(:mozilla, "<=4.0")
+    assert_equal false, tokens.has?(:mozilla, ">5.9")
+  end
+
+
+  def test_token_has_no_version
+    ua = "Mozilla/5.0 (S60V5; U; Pt-br; Nokia5233)/UC Browser8.2.0.132/50/355/\
+UCWEB Mobile"
+
+    tokens = UATokenizer.parse ua
+    assert_equal true,  tokens.has?(:nokia)
+    assert_equal false, tokens.has?(:nokia, ">=0")
+  end
 end

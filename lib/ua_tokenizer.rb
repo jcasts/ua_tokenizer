@@ -229,6 +229,29 @@ class UATokenizer
 
 
   ##
+  # Check if a given token is available with an optional version string.
+  #   tokens.has?('mozilla', '>=5.0')
+
+  def has? name, version=nil
+    token_version = self[name]
+    return !!token_version unless version
+    return false           unless String === token_version
+
+    op = '=='
+    version = version.strip
+
+    if version =~ /^([><=]=?)/
+      op = $1
+      version = version[op.length..-1].strip
+    end
+
+    op = '==' if op == '='
+
+    token_version.send(op, version)
+  end
+
+
+  ##
   # Returns true if all given keys match a token.
 
   def all?(*keys)
