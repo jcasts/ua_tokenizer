@@ -335,9 +335,77 @@ class TestUaTokenizer < Test::Unit::TestCase
   end
 
 
-  #TODO: figure out how to parse this
-  def _test_parse_product_nospace
-    map = UATokenizer.parse_product "Duo/MTKRelease/2011/07/01Browser/MAUIProfile/MIDP-2.0Configuration/CLDC-1.0"
-    assert_equal({}, map)
+  def test_split
+    arr = UATokenizer.split "sam375/1.0[TF268435460214674193000000014783318126]\
+ UP.Browser/6.2.3.8 (GUI) MMP/2.0 Profile/MIDP-2.0 Configuration/CLDC-1.1"
+
+    expected = %w{sam375/1.0 TF268435460214674193000000014783318126
+      UP.Browser/6.2.3.8 GUI MMP/2.0 Profile/MIDP-2.0 Configuration/CLDC-1.1}
+
+    assert_equal expected, arr
+  end
+
+
+  def test_split_no_spaces
+    ua = "T24 WIFI Duo/MTKRelease/2011/07/01Browser/MAUIProfile/MIDP-2.0\
+Configuration/CLDC-1.0"
+    arr = UATokenizer.split ua
+
+    expected = %w{T24\ WIFI\ Duo/MTK Release/2011.07.01 Browser/MAUI
+      Profile/MIDP-2.0 Configuration/CLDC-1.0}
+
+    assert_equal expected, arr
+  end
+
+
+  def test_split_JUC
+    ua = "JUC(Linux;U;Android2.3.5;Zh_cn;HTC Desire HD A9191;480*800;)\
+UCWEB7.8.0.95/139/355"
+    arr = UATokenizer.split ua
+
+    expected = %w{JUC Linux U Android2.3.5 Zh_cn HTC\ Desire\ HD\ A9191
+      480*800 UCWEB7.8.0.95/139/355}
+    assert_equal expected, arr
+  end
+
+
+  def test_split_w_screen
+    arr = UATokenizer.split "Opera/9.5 (Microsoft Windows; Windows CE; \
+Opera Mobi/9.5; U; en) Samsung-SCHI910 PPC 240x400"
+
+    expected = %w{Opera/9.5 Microsoft\ Windows Windows\ CE Opera\ Mobi/9.5 U en
+      Samsung-SCHI910\ PPC 240x400}
+
+    assert_equal expected, arr
+  end
+
+
+  def test_split_opera_mobile
+    arr = UATokenizer.split \
+            "Opera/8.01 (J2ME/MIDP; Opera Mini/3.1.9427/1724; es; U; ssr)"
+
+    expected = %w{Opera/8.01 J2ME/MIDP Opera\ Mini/3.1.9427/1724 es U ssr}
+
+    assert_equal expected, arr
+  end
+
+
+  def test_split_twitter_android
+    arr = UATokenizer.split "TwitterAndroid/3.3.1 (169) HTC Sensation Z710e/15\
+ (HTC;pyramid;vodafone_uk;htc_pyramid;1)"
+
+    expected = %w{TwitterAndroid/3.3.1 169 HTC\ Sensation\ Z710e/15 HTC pyramid
+      vodafone_uk htc_pyramid 1}
+
+    assert_equal expected, arr
+  end
+
+
+  def test_split_nosplit
+    arr = UATokenizer.split "WebWatcher1.35"
+    assert_equal ["WebWatcher1.35"], arr
+
+    arr = UATokenizer.split "T58 WAP Browser"
+    assert_equal ["T58 WAP Browser"], arr
   end
 end

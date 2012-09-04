@@ -14,8 +14,7 @@ class UATokenizer
   }
 
   COMMON_TOKENS = %w{
-    version profile configuration mobile untrusted browser os
-    cpu x like web phone like for
+    mobile browser os cpu x like web phone like for
   }
 
   MAX_TOKEN_LENGTH = 25
@@ -30,8 +29,15 @@ class UATokenizer
     :nprefix => /([A-Z]{3,})(\d)/
   }
 
-  SEC_MATCHER = /(?:^|\W)([NUI])(\W|$)/
-  LAN_MATCHER = /(?:^|\W)([a-z]{2,3})(?:[\-_]([a-z]{2,3}))?(\W|$)/i
+  SEC_MATCHER = /^([NUI])$/
+  LAN_MATCHER = /^([a-z]{2})(?:[\-_]([a-z]{2,3}))?$/i
+  SCR_MATCHER = /(\d{2,4}[xX*]\d{2,4})/
+
+  DATE_MATCHER          = %r{(^|\D)(\d{4})/(\d{2})/(\d{2})(\D|$)}
+  NOSPACE_MATCHER       = %r{([^\s]+/){4,}}
+  NOSPACE_DELIM_MATCHER = /([0-9A-Z])([A-Z][a-z])/
+  UA_DELIM_MATCHER      = %r{(/(?:[^\s;])+|[\)\]])[\s;]+(\w)}
+  UA_SPLIT_MATCHER      = /\s*[;()\[\],]+\s*/
 
   DEVICE_MATCHER = /(?:[a-z]([A-Z]{0,3})|[-_ ]([a-zA-Z]{0,3}))(\d+[a-z]{0,2})/
 
@@ -40,7 +46,55 @@ class UATokenizer
   # Parse the User-Agent String and return a UATokenizer instance.
 
   def self.parse ua
-    
+    data = {}
+    meta = {}
+
+    split(ua).each do |part|
+      part.strip!
+
+      case part
+      when SCR_MATCHER
+        meta[:screen] = part.split(/[\*xX]/, 2)
+        next
+
+      when LAN_MATCHER
+        if !meta[:localization] || meta[:localization] && ($2 || $1.length < meta[:localization].length)
+          meta[:localization] = ($2 ? "#{$1}-#{$2}" : $1).downcase
+          next
+        end
+
+      when SEC_MATCHER
+        meta[:security] = part
+        next
+      end
+
+      data.merge! parse_product(part)
+    end
+
+    new data, meta
+  end
+
+
+  ##
+  # Splits the User-Agent String into meaningful pieces.
+
+  def self.split ua
+    ua = ua.dup
+
+    # Make YYYY/MM/DD into YYYY.MM.DD for easier parsing
+    ua.gsub!(DATE_MATCHER, '\1\2.\3.\4\5')
+
+    if ua =~ NOSPACE_MATCHER
+      # Handle UAs without spaces. Split on 0|A HP|Compaq.
+      ua.gsub!(NOSPACE_DELIM_MATCHER, '\1;\2')
+    else
+      # Add split markers to avoid needing to split on spaces.
+      ua.gsub!(UA_DELIM_MATCHER, '\1;\2')
+    end
+
+    ua.sub!(SCR_MATCHER, ';\1;')
+
+    ua.split(UA_SPLIT_MATCHER)
   end
 
 
@@ -126,7 +180,7 @@ class UATokenizer
     2.times{ str.gsub!(/(\d)_(\d)/, '\1.\2') } # serialize version
     TOKEN_MATCHERS.each{|k, regex| str.gsub!(regex, '\1_\2') }
 
-    parts = str.downcase.split(/[_\s\-\/;]/)
+    parts = str.downcase.split(/[_\s\-\/:;]/)
     tokens = []
 
     last = nil
@@ -155,7 +209,8 @@ class UATokenizer
   ##
   # Create a new UATokenizer instance from parsed User-Agent data.
 
-  def initialize data
+  def initialize data, meta=nil
+    @meta   = meta || {}
     @tokens = data
   end
 
