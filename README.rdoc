@@ -11,12 +11,17 @@ Parse UserAgent strings into logical parts.
   ua = "Mozilla/5.0 (Series40; NokiaC3-00/03.35; Profile/MIDP-2.1 Configuration/CLDC-1.1) Gecko/20100401 S40OviBrowser/2.0.2.68.14"
 
   tokens = UATokenizer.parse ua
-  assert_equal "cldc-1.1", tokens[:configuration]
-  assert_equal "03.35",    tokens[:nokia]
-  assert_equal "03.35",    tokens[:nokia_c3]
+  tokens[:configuration]                    #=> "cldc-1.1"
+  tokens[:nokia]                            #=> "03.35"
+  tokens[:nokia_c3]                         #=> "03.35"
 
-  assert_equal "2.0.2.68.14", tokens[:series_40]
-  assert_equal "2.0.2.68.14", tokens[:ovi_browser]
+  tokens[:series_40]                        #=> "2.0.2.68.14"
+  tokens[:ovi_browser]                      #=> "2.0.2.68.14"
+
+  tokens.has?(:ovi_browser, ">=2.0.2")      #=> true
+
+  tokens.all?(:mozilla, :series_40, :nokia) #=> true
+  tokens.any?(:samsung, :lg, :nokia)        #=> true
 
 == INSTALL:
 
