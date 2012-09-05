@@ -4,7 +4,7 @@
 
 == Description
 
-Parse User-Agent strings into logical parts.
+Flexible parsing of User-Agent strings into logical parts.
 
 == Usage
 
