@@ -463,6 +463,41 @@ AppleWebKit/534.20 (KHTML, like Gecko) Dolfin/3.0 Mobile HVGA SMM-MMS/1.2.0 OPN-
   end
 
 
+  def test_parse_samsung_opera_w_screen
+    ua = "Opera/9.5 (Microsoft Windows; Windows CE; Opera Mobi/9.5; U; en) \
+480x800 SAMSUNG SCH-i920 PPC"
+
+    tokens = UATokenizer.parse ua
+
+    assert_equal "U",        tokens.security
+    assert_equal "en",       tokens.localization
+    assert_equal [480, 800], tokens.screen
+  end
+
+
+  def test_parse_htc_desire_juc
+    ua = "JUC(Linux;U;Android2.3.5;Zh_cn;HTC Desire HD A9191;480*800;)\
+UCWEB7.8.0.95/139/355"
+
+    tokens = UATokenizer.parse ua
+
+    assert_equal "U",        tokens.security
+    assert_equal "zh-cn",    tokens.localization
+    assert_equal [480, 800], tokens.screen
+
+    assert_equal "2.3.5", tokens[:android]
+    assert tokens.has?(:android, ">=2.3.5")
+
+    assert tokens.has?(:ucweb, "7.8.0.95")
+
+    assert_equal true, tokens[:htc]
+    assert_equal true, tokens[:htc_desire]
+    assert_equal true, tokens[:desire]
+    assert_equal true, tokens[:hd_a9191]
+    assert_equal true, tokens[:linux]
+  end
+
+
   def test_parse_series60_uc
     ua = "Mozilla/5.0 (S60V5; U; Pt-br; Nokia5233)/UC Browser8.2.0.132/50/355/\
 UCWEB Mobile"

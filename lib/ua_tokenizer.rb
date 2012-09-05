@@ -41,8 +41,6 @@ class UATokenizer
   UA_DELIM_MATCHER      = %r{(/(?:[^\s;])+|[\)\]])[\s;]+(\w)}
   UA_SPLIT_MATCHER      = /\s*[;()\[\],]+\s*/
 
-  DEVICE_MATCHER = /(?:[a-z]([A-Z]{0,3})|[-_ ]([a-zA-Z]{0,3}))(\d+[a-z]{0,2})/
-
 
   ##
   # Parse the User-Agent String and return a UATokenizer instance.
@@ -56,7 +54,7 @@ class UATokenizer
 
       case part
       when SCR_MATCHER
-        meta[:screen] = part.split(/[\*xX]/, 2)
+        meta[:screen] = part.split(/[\*xX]/, 2).map(&:to_i)
         next
 
       when LAN_MATCHER
