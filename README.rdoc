@@ -47,7 +47,7 @@ previous example:
 
   tokens.has?(:gecko,   ">=2005.01.10") #=> true
   tokens.has?(:mozilla, "<5.0")         #=> false
-  tokens.has?(:linuz,   ">1.0")         #=> false (linux token has no version)
+  tokens.has?(:linux,   ">1.0")         #=> false (linux token has no version)
   
 
 == Install
