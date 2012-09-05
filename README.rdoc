@@ -51,7 +51,23 @@ previous example:
 
   tokens.any?(:lg, :samsung, :nokia)    #=> true
   tokens.all?(:lg, :samsung, :nokia)    #=> false
-  
+
+Unfortunately, many proper names in user agents vary from one browser or device
+to another. UATokenizer does have a simple mapping mechanism to account for
+variations such as "symb", "symbian", "sam", "samsung", "mot, "motorolla".
+This mapping may be modified at need and is defined as such:
+
+  UATokenizer::TOKEN_MAPS = {
+    'black_berry' => 'blackberry',
+    'crios'       => 'chrome',
+    'fb'          => 'facebook',
+    'lge'         => 'lg',
+    'mot'         => 'motorolla',
+    's40'         => 'series_40',
+    's60'         => 'series_60',
+    'sam'         => 'samsung',
+    'symb'        => 'symbian'
+  }
 
 == Install
 

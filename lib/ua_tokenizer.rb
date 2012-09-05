@@ -10,7 +10,7 @@ class UATokenizer
     's40'         => 'series_40',
     's60'         => 'series_60',
     'sam'         => 'samsung',
-    'symb'        => 'symbian',
+    'symb'        => 'symbian'
   }
 
   COMMON_TOKENS = %w{
