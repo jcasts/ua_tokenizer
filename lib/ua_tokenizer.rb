@@ -35,7 +35,7 @@ class UATokenizer
   LAN_MATCHER = /^([a-z]{2})(?:[\-_]([a-z]{2,3}))?$/i
   SCR_MATCHER = /(\d{2,4}[xX*]\d{2,4})/
 
-  DATE_MATCHER          = %r{(^|\D)(\d{4})/(\d{2})/(\d{2})(\D|$)}
+  DATE_MATCHER          = %r{(^|\D)((?:19|20)\d{2})/?(0\d|1[0-2])/?([0-2]\d|3[01])(\D|$)}
   NOSPACE_MATCHER       = %r{\)/[a-zA-Z]|([^\s]+/){4,}}
   NOSPACE_DELIM_MATCHER = %r{([0-9A-Z])([A-Z][a-z])|\)/}
   UA_DELIM_MATCHER      = %r{(/(?:[^\s;])+|[\)\]])[\s;]+(\w)}

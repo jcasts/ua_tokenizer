@@ -488,6 +488,8 @@ Configuration/CLDC-1.1) Gecko/20100401 S40OviBrowser/2.0.2.68.14"
 
     assert_equal "2.0.2.68.14", tokens[:series_40]
     assert_equal "2.0.2.68.14", tokens[:ovi_browser]
+
+    assert_equal "2010.04.01", tokens[:gecko]
   end
 
 
