@@ -18,6 +18,8 @@ Parse UserAgent strings into logical parts.
   tokens[:series_40]                        #=> "2.0.2.68.14"
   tokens[:ovi_browser]                      #=> "2.0.2.68.14"
 
+  tokens[:gecko]                            #=> "2010.04.01"
+
   tokens.has?(:ovi_browser, ">=2.0.2")      #=> true
 
   tokens.all?(:mozilla, :series_40, :nokia) #=> true
