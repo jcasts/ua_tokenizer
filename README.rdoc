@@ -2,34 +2,59 @@
 
 * http://yaks.me/ua_tokenizer
 
-== DESCRIPTION:
+== Description
 
-Parse UserAgent strings into logical parts.
+Parse User-Agent strings into logical parts.
 
-== SYNOPSIS:
+== Usage
 
-  ua = "Mozilla/5.0 (Series40; NokiaC3-00/03.35; Profile/MIDP-2.1 Configuration/CLDC-1.1) Gecko/20100401 S40OviBrowser/2.0.2.68.14"
+UATokenizer will try to break up User-Agent strings into what looks like
+logical, meaningful parts, and optionally an attached version. If no version
+is found for a token, its value is true. Here's an example:
+
+  ua = "SAMSUNG-GT-B5310/B5310MBJF1 SHP/VPP/R5 Dolfin/1.5 Nextreaming \
+  SMM-MMS/1.2.0 profile/MIDP-2.1 configuration/CLDC-1.1"
 
   tokens = UATokenizer.parse ua
-  tokens[:configuration]                    #=> "cldc-1.1"
-  tokens[:nokia]                            #=> "03.35"
-  tokens[:nokia_c3]                         #=> "03.35"
 
-  tokens[:series_40]                        #=> "2.0.2.68.14"
-  tokens[:ovi_browser]                      #=> "2.0.2.68.14"
+  tokens[:configuration]      #=> "cldc-1.1"
+  tokens[:dolfin]             #=> "1.5"
+  tokens[:nokia_c3]           #=> "03.35"
 
-  tokens[:gecko]                            #=> "2010.04.01"
+  tokens[:samsung]            #=> "B5310MBJF1"
+  tokens[:gt_b5310]           #=> "B5310MBJF1"
 
-  tokens.has?(:ovi_browser, ">=2.0.2")      #=> true
+  tokens[:nextreaming]        #=> true
 
-  tokens.all?(:mozilla, :series_40, :nokia) #=> true
-  tokens.any?(:samsung, :lg, :nokia)        #=> true
+Additionally, certain tokens will be identified as a screen size, browser
+security level, or localization and may be retrieved via their respective
+attributes:
 
-== INSTALL:
+  ua = "Mozilla/5.0 (X11; Linux i686; U; en-US) Gecko/20081217 \
+  Vision-Browser/8.1 301x200 LG VN530"
+
+  tokens = UATokenizer.parse ua
+
+  tokens.screen               #=> [301, 200]
+  tokens.localization         #=> "en-us"
+  tokens.security             #=> "U"
+
+  tokens[:gecko]              #=> "2008.12.17"
+  tokens[:lg_vn530]           #=> true
+
+Some helper methods make checking token versions easier, assuming the
+previous example:
+
+  tokens.has?(:gecko,   ">=2005.01.10") #=> true
+  tokens.has?(:mozilla, "<5.0")         #=> false
+  tokens.has?(:linuz,   ">1.0")         #=> false (linux token has no version)
+  
+
+== Install
 
 * gem install ua_tokenizer
 
-== DEVELOPERS:
+== Developers
 
 After checking out the source, run:
 
@@ -38,7 +63,7 @@ After checking out the source, run:
 This task will install any missing dependencies, run the tests/specs,
 and generate the RDoc.
 
-== LICENSE:
+== License
 
 (The MIT License)
 

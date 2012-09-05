@@ -547,6 +547,22 @@ UCWEB Mobile"
   end
 
 
+  def test_parse_lg
+    ua = "Mozilla/5.0 (X11; Linux i686; U; en-US) Gecko/20081217 \
+ Vision-Browser/8.1 301x200 LG VN530"
+
+    tokens = UATokenizer.parse ua
+
+    assert_equal [301, 200],   tokens.screen
+    assert_equal "en-us",      tokens.localization
+    assert_equal "U",          tokens.security
+
+    assert_equal true,         tokens[:lg]
+    assert_equal true,         tokens[:lg_vn530]
+    assert_equal "2008.12.17", tokens[:gecko]
+  end
+
+
   def test_token_has_false
     ua = "Mozilla/5.0 (S60V5; U; Pt-br; Nokia5233)/UC Browser8.2.0.132/50/355/\
 UCWEB Mobile"
