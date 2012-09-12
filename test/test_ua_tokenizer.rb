@@ -606,6 +606,49 @@ Configuration/CLDC-1.1 VendorID/303"
   end
 
 
+  def test_parse_infopath2
+    ua = "Nokia5300/2.0 (07.20) Profile/MIDP-2.0 Configuration/CLDC-1.1 \
+Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2;.NET \
+CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; \
+InfoPath.2) UCBrowser8.4.0.159/69/352 UNTRUSTED/1.0"
+
+    tokens = UATokenizer.parse ua
+
+    expected = {
+      "nokia"=>"2.0",
+      "nokia_5300"=>"2.0",
+      "profile"=>"midp-2.0",
+      "configuration"=>"cldc-1.1",
+      "mozilla"=>"4.0",
+      "compatible"=>true,
+      "msie"=>"8.0",
+      "windows"=>"6.1",
+      "windows_nt"=>"6.1",
+      "nt"=>"6.1",
+      "trident"=>"4.0",
+      "slcc"=>true,
+      "slcc_2"=>true,
+      ".net"=>"3.0.30729",
+      ".net_clr"=>"3.0.30729",
+      "clr"=>"3.0.30729",
+      "media"=>"6.0",
+      "media_center"=>"6.0",
+      "center"=>"6.0",
+      "center_pc"=>"6.0",
+      "pc"=>"6.0",
+      "info"=>true,
+      "info_path"=>true,
+      "path"=>true,
+      "path_2"=>true,
+      "uc"=>"8.4.0.159",
+      "uc_browser"=>"8.4.0.159",
+      "untrusted"=>"1.0"
+    }
+
+    assert_equal expected, tokens.instance_variable_get("@tokens")
+  end
+
+
   def test_parse_blackberry_mozilla
     ua = "Mozilla/5.0 (BlackBerry; U; BlackBerry 9900; en-GB) \
 AppleWebKit/534.11+ (KHTML, like Gecko) Version/7.0.0.503 Mobile Safari/534.11+"

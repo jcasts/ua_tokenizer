@@ -27,7 +27,7 @@ class UATokenizer
     # Non-lowercase first
     %r{([A-Z](?:[A-Z]|\d+))#{MFOR}([a-z][^a-z]|[A-Z]{1,2}[a-z\d]{2,})},
     # Lowercase ro pre-underscored first
-    /(_[A-Z][a-z]+|[a-z]{3,})([\dA-Z])/,
+    /(_[A-Z][a-z]+|[a-z]{3,})\.?([\dA-Z])/,
     # Suffix identification
     /(\d)([a-zA-Z]+\d)/,
     # Nprefix identification
@@ -36,7 +36,7 @@ class UATokenizer
 
   SEC_MATCHER = /^([NUI])$/
   LAN_MATCHER = /^([a-z]{2})(?:[\-_]([a-z]{2,3}))?$/i
-  SCR_MATCHER = /(\d{2,4}[xX*]\d{2,4})/
+  SCR_MATCHER = /((\d{2,4})[xX*](\d{2,4}))/
 
   DATE_MATCHER          = %r{(^|\D)((?:19|20)\d{2})/?(0\d|1[0-2])/?([0-2]\d|3[01])(\D|$)}
   NOSPACE_MATCHER       = %r{\)/[a-zA-Z]|([^\s]+/){4,}}
@@ -59,7 +59,7 @@ class UATokenizer
 
       case part
       when SCR_MATCHER
-        meta[:screen] = part.split(/[\*xX]/, 2).map(&:to_i)
+        meta[:screen] = [$2.to_i, $3.to_i]
         next
 
       when LAN_MATCHER
