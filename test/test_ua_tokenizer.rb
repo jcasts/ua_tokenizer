@@ -4,22 +4,21 @@ require "ua_tokenizer"
 class TestUaTokenizer < Test::Unit::TestCase
   def test_tokenize_4part_upper
     tokens = UATokenizer.tokenize("SAMSUNG-GT-S5620-ORANGE")
-    expected = ["samsung", "samsung_gt", "gt", "gt_s5620", "s5620",
-                "s5620_orange", "orange"]
+    expected = ["samsung", "gt", "s5620", "orange"]
     assert_equal expected, tokens
   end
 
 
   def test_tokenize_3part_camel
     tokens = UATokenizer.tokenize("SonyEricssonCK15i")
-    expected = ["sony", "sony_ericsson", "ericsson", "ericsson_ck15i", "ck15i"]
+    expected = ["sony", "ericsson", "ck15i"]
     assert_equal expected, tokens
   end
 
 
   def test_tokenize_2part_dash
     tokens = UATokenizer.tokenize("gt-s5230")
-    assert_equal ["gt", "gt_s5230", "s5230"], tokens
+    assert_equal ["gt", "s5230"], tokens
   end
 
 
@@ -28,15 +27,14 @@ class TestUaTokenizer < Test::Unit::TestCase
     assert_equal ["iphone"], tokens
 
     tokens = UATokenizer.tokenize("Apple iPad")
-    assert_equal ["apple", "apple_ipad", "ipad"], tokens
+    assert_equal ["apple", "ipad"], tokens
 
     tokens = UATokenizer.tokenize("CPU iPhone OS 5_1 like Mac OS X")
-    expected = ["cpu", "cpu_iphone", "iphone", "iphone_os", "os", "5.1",
-                "like", "like_mac", "mac", "mac_os", "os", "os_x", "x"]
+    expected = ["cpu", "iphone", "os", "5.1", "like", "mac", "os", "x"]
     assert_equal expected, tokens
 
     tokens = UATokenizer.tokenize("FBForIPhone")
-    assert_equal ["fb", "fb_iphone", "iphone"], tokens
+    assert_equal ["fb", "iphone"], tokens
 
     tokens = UATokenizer.tokenize("CriOS")
     assert_equal ["crios"], tokens
@@ -45,17 +43,17 @@ class TestUaTokenizer < Test::Unit::TestCase
 
   def test_tokenize_windows
     tokens = UATokenizer.tokenize("Windows NT 5.1")
-    assert_equal ["windows", "windows_nt", "nt", "5.1"], tokens
+    assert_equal ["windows", "nt", "5.1"], tokens
 
     tokens = UATokenizer.tokenize("Windows Phone OS 7.5")
-    expected = ["windows", "windows_phone", "phone", "phone_os", "os", "7.5"]
+    expected = ["windows", "phone", "os", "7.5"]
     assert_equal expected, tokens
 
     tokens = UATokenizer.tokenize("IEMobile")
-    assert_equal ["ie", "ie_mobile", "mobile"], tokens
+    assert_equal ["ie", "mobile"], tokens
 
     tokens = UATokenizer.tokenize("IEMobile 7.11")
-    assert_equal ["ie", "ie_mobile", "mobile", "7.11"], tokens
+    assert_equal ["ie", "mobile", "7.11"], tokens
 
     tokens = UATokenizer.tokenize("Win98")
     assert_equal ["win98"], tokens
@@ -68,19 +66,19 @@ class TestUaTokenizer < Test::Unit::TestCase
   def test_tokenize_4part_spaces
     tokens = UATokenizer.tokenize("HTC Desire HD A9191")
     expected =
-      ["htc", "htc_desire", "desire", "desire_hd", "hd", "hd_a9191", "a9191"]
+      ["htc", "desire", "hd", "a9191"]
     assert_equal expected, tokens
 
     tokens = UATokenizer.tokenize("HTC_Touch_HD_T8282")
     expected =
-      ["htc", "htc_touch", "touch", "touch_hd", "hd", "hd_t8282", "t8282"]
+      ["htc", "touch", "hd", "t8282"]
     assert_equal expected, tokens
   end
 
 
   def test_tokenize_3part_dashed
     tokens = UATokenizer.tokenize("ZTE-Sydney-Orange")
-    expected = ["zte", "zte_sydney", "sydney", "sydney_orange", "orange"]
+    expected = ["zte", "sydney", "orange"]
     assert_equal expected, tokens
   end
 
@@ -96,20 +94,19 @@ class TestUaTokenizer < Test::Unit::TestCase
 
   def test_tokenize_nokia
     tokens = UATokenizer.tokenize("MeeGo NokiaN9")
-    assert_equal ["meego", "meego_nokia", "nokia", "nokia_n9", "n9"], tokens
+    assert_equal ["meego", "nokia", "n9"], tokens
   end
 
 
   def test_tokenize_ambiguous_scrunched_names
     tokens = UATokenizer.tokenize("HPiPAQ910")
-    assert_equal ["hp", "hp_ipaq", "ipaq", "ipaq_910", "910"], tokens
+    assert_equal ["hp", "ipaq", "910"], tokens
 
     tokens = UATokenizer.tokenize("HuaweiU3100")
-    assert_equal ["huawei", "huawei_u3100", "u3100"], tokens
+    assert_equal ["huawei", "u3100"], tokens
 
     tokens = UATokenizer.tokenize("EFS-EE-ORG-P107A20V1.0.5")
-    expected = ["efs", "efs_ee", "ee", "ee_org", "org", "org_p107", "p107",
-                "p107_a20", "a20", "v1.0.5"]
+    expected = ["efs", "ee", "org", "p107", "a20", "v1.0.5"]
     assert_equal expected, tokens
 
     tokens = UATokenizer.tokenize("DoCoMo")
@@ -119,7 +116,7 @@ class TestUaTokenizer < Test::Unit::TestCase
 
   def test_tokenize_twitter_android
     tokens = UATokenizer.tokenize("TwitterAndroid")
-    assert_equal ["twitter", "twitter_android", "android"], tokens
+    assert_equal ["twitter", "android"], tokens
   end
 
 
@@ -131,13 +128,13 @@ class TestUaTokenizer < Test::Unit::TestCase
     assert_equal ["netfront"], tokens
 
     tokens = UATokenizer.tokenize("UC Browser7.7.1.88")
-    assert_equal ["uc", "uc_browser", "browser", "7.7.1.88"], tokens
+    assert_equal ["uc", "browser", "7.7.1.88"], tokens
 
     tokens = UATokenizer.tokenize("WAP-Browser")
-    assert_equal ["wap", "wap_browser", "browser"], tokens
+    assert_equal ["wap", "browser"], tokens
 
     tokens = UATokenizer.tokenize("TelecaBrowser")
-    assert_equal ["teleca", "teleca_browser", "browser"], tokens
+    assert_equal ["teleca", "browser"], tokens
   end
 
 
@@ -145,25 +142,20 @@ class TestUaTokenizer < Test::Unit::TestCase
     tokens = UATokenizer.tokenize("S60V5")
     assert_equal ["s60", "v5"], tokens
 
-    tokens = UATokenizer.tokenize("S60V5") do |t|
-      t == "s60" ? "series_60" : t
-    end
-    assert_equal ["series_60", "v5"], tokens
-
     tokens = UATokenizer.tokenize("Series60")
-    assert_equal ["series", "series_60", "60"], tokens
+    assert_equal ["series", "60"], tokens
   end
 
 
   def test_tokenize_lg
     tokens = UATokenizer.tokenize("LG-KU990i")
-    assert_equal ["lg", "lg_ku990i", "ku990i"], tokens
+    assert_equal ["lg", "ku990i"], tokens
 
     tokens = UATokenizer.tokenize("LGC300")
-    assert_equal ["lg", "lg_c300", "c300"], tokens
+    assert_equal ["lg", "c300"], tokens
 
     tokens = UATokenizer.tokenize("LGPlayer")
-    assert_equal ["lg", "lg_player", "player"], tokens
+    assert_equal ["lg", "player"], tokens
   end
 
 
@@ -178,43 +170,31 @@ class TestUaTokenizer < Test::Unit::TestCase
     assert_equal ["webkit"], tokens
 
     tokens = UATokenizer.tokenize("AppleWebKit")
-    assert_equal ["apple", "apple_webkit", "webkit"], tokens
+    assert_equal ["apple", "webkit"], tokens
   end
 
 
   def test_tokenize_blackberry
     tokens = UATokenizer.tokenize("BlackBerry")
-    assert_equal ["black", "black_berry", "berry"], tokens
+    assert_equal ["black", "berry"], tokens
 
     tokens = UATokenizer.tokenize("BlackBerry9550")
-    assert_equal ["black", "black_berry", "berry", "berry_9550", "9550"], tokens
-
-    tokens = UATokenizer.tokenize("BlackBerry9550") do |t|
-      t = "blackberry" if t == "black_berry"
-      t = nil if t == "berry" || t == "black"
-      t
-    end
-    assert_equal ["blackberry", "blackberry_9550", "9550"], tokens
+    assert_equal ["black", "berry", "9550"], tokens
   end
 
 
   def test_tokenize_webos
     tokens = UATokenizer.tokenize("webOS")
-    assert_equal ["web", "web_os", "os"], tokens
+    assert_equal ["web", "os"], tokens
   end
 
 
   def test_tokenize_symbian
     tokens = UATokenizer.tokenize("SymbianOS")
-    assert_equal ["symbian", "symbian_os", "os"], tokens
+    assert_equal ["symbian", "os"], tokens
 
     tokens = UATokenizer.tokenize("SymbOS")
-    assert_equal ["symb", "symb_os", "os"], tokens
-
-    tokens = UATokenizer.tokenize("SymbOS") do |t|
-      t == "symb" ? "symbian" : t
-    end
-    assert_equal ["symbian", "symbian_os", "os"], tokens
+    assert_equal ["symb", "os"], tokens
   end
 
 
@@ -297,6 +277,27 @@ class TestUaTokenizer < Test::Unit::TestCase
   end
 
 
+  def test_parse_product_blackberry
+    map = UATokenizer.parse_product "BlackBerry9550/5.0.0.550"
+    expected = {
+      "blackberry"      => "5.0.0.550",
+      "blackberry_9550" => "5.0.0.550",
+    }
+
+    assert_equal expected, map
+  end
+
+
+  def test_parse_product_webos
+    map = UATokenizer.parse_product "webOS/1.4.5"
+    expected = {
+      "web_os" => "1.4.5",
+    }
+
+    assert_equal expected, map
+  end
+
+
   def test_parse_product_noslash
     map = UATokenizer.parse_product "Windows Phone OS 7.5"
     expected = {"windows"=>"7.5", "windows_phone"=>"7.5", "phone_os"=>"7.5"}
@@ -305,6 +306,7 @@ class TestUaTokenizer < Test::Unit::TestCase
     map = UATokenizer.parse_product " CPU OS 3_2_1 like Mac OS X"
     expected = {
       "cpu_os"   =>"3.2.1",
+      "os_like"  =>"3.2.1",
       "like_mac" =>"3.2.1",
       "mac"      =>"3.2.1",
       "mac_os"   =>"3.2.1",
@@ -339,8 +341,8 @@ class TestUaTokenizer < Test::Unit::TestCase
     map = UATokenizer.parse_product "S40OviBrowser/2.0.2.68.14"
     expected = {
       "series_40"=>"2.0.2.68.14",
+      "series_40_ovi"=>"2.0.2.68.14",
       "ovi"=>"2.0.2.68.14",
-      "40_ovi"=>"2.0.2.68.14",
       "ovi_browser"=>"2.0.2.68.14"
     }
 
@@ -364,7 +366,7 @@ class TestUaTokenizer < Test::Unit::TestCase
 Configuration/CLDC-1.0"
     arr = UATokenizer.split ua
 
-    expected = %w{T24\ WIFI\ Duo/MTK Release/2011.07.01 Browser/MAUI
+    expected = %w{T24\ WIFI\ Duo/MTK Release/2011/07/01 Browser/MAUI
       Profile/MIDP-2.0 Configuration/CLDC-1.0}
 
     assert_equal expected, arr
@@ -560,6 +562,62 @@ UCWEB Mobile"
     assert_equal true,         tokens[:lg]
     assert_equal true,         tokens[:lg_vn530]
     assert_equal "2008.12.17", tokens[:gecko]
+  end
+
+
+  def test_parse_webos
+    ua = "Mozilla/5.0 (webOS/1.4.5; U; en-US) AppleWebKit/532.2 \
+(KHTML, like Gecko) Version/1.0 Safari/532.2 Pre/1.0"
+
+    tokens = UATokenizer.parse ua
+
+    assert_equal "en-us", tokens.localization
+    assert_equal "U",     tokens.security
+
+    assert_equal "1.4.5", tokens[:web_os]
+    assert_equal "532.2", tokens[:Safari]
+    assert_equal "1.0",   tokens[:pre]
+    assert_equal "532.2", tokens[:apple]
+    assert_equal "532.2", tokens[:apple_webkit]
+    assert_equal "532.2", tokens[:webkit]
+  end
+
+
+  def test_parse_blackberry
+    ua = "BlackBerry9550/5.0.0.550 Profile/MIDP-2.1 \
+Configuration/CLDC-1.1 VendorID/303"
+
+    tokens = UATokenizer.parse ua
+
+    assert_equal "5.0.0.550", tokens[:blackberry]
+    assert_equal "5.0.0.550", tokens[:blackberry_9550]
+    assert_equal "303",       tokens[:vendor_id]
+  end
+
+
+  def test_parse_cricket
+    ua = "Cricket-A310/1.0 UP.Browser/6.3.0.7 (GUI) MMP/2.0"
+    tokens = UATokenizer.parse ua
+
+    assert_equal "1.0", tokens[:cricket]
+    assert_equal "1.0", tokens[:cricket_a310]
+    assert_equal "1.0", tokens[:a310]
+    assert_equal "6.3.0.7", tokens[:up_browser]
+  end
+
+
+  def test_parse_blackberry_mozilla
+    ua = "Mozilla/5.0 (BlackBerry; U; BlackBerry 9900; en-GB) \
+AppleWebKit/534.11+ (KHTML, like Gecko) Version/7.0.0.503 Mobile Safari/534.11+"
+
+    tokens = UATokenizer.parse ua
+
+    assert_equal "en-gb", tokens.localization
+    assert_equal "U",     tokens.security
+
+    assert_equal true,     tokens[:blackberry]
+    assert_equal true,     tokens[:blackberry_9900]
+    assert_equal "534.11", tokens[:WebKit]
   end
 
 

@@ -21,15 +21,18 @@ class UATokenizer
 
   VERSION_MATCH = /^(v?(\d+\.)+\d+|v\d+)$/i
 
-  TOKEN_MATCHERS = {
-    :camel0  => /([A-Z\d])[Ff]or([A-Z]+[a-z]+)/,
-    :camel1  => /([A-Z]\d+)([A-Z][a-z])/,
-    :camel2  => /(_[A-Z][a-z]+)([A-Z][a-z])/,
-    :camel3  => /([a-z]{3,})([\dA-Z])/,
-    :camel4  => /([A-Z]{2,})([a-z]{1,2}[^a-z]|[A-Z][a-z]{2,}|[A-Z][0-9]{2,})/,
-    :suffix  => /(\d)([a-zA-Z]+\d)/,
-    :nprefix => /([A-Z]{3,})(\d)/
-  }
+  MFOR = /(?:[Ff]or)?/
+
+  TOKEN_MATCHERS = [
+    # Non-lowercase first
+    %r{([A-Z](?:[A-Z]|\d+))#{MFOR}([a-z][^a-z]|[A-Z]{1,2}[a-z\d]{2,})},
+    # Lowercase ro pre-underscored first
+    /(_[A-Z][a-z]+|[a-z]{3,})([\dA-Z])/,
+    # Suffix identification
+    /(\d)([a-zA-Z]+\d)/,
+    # Nprefix identification
+    /([A-Z]{3,})(\d)/
+  ]
 
   SEC_MATCHER = /^([NUI])$/
   LAN_MATCHER = /^([a-z]{2})(?:[\-_]([a-z]{2,3}))?$/i
@@ -41,13 +44,15 @@ class UATokenizer
   UA_DELIM_MATCHER      = %r{(/(?:[^\s;])+|[\)\]])[\s;]+(\w)}
   UA_SPLIT_MATCHER      = /\s*[;()\[\],]+\s*/
 
-
   ##
   # Parse the User-Agent String and return a UATokenizer instance.
 
   def self.parse ua
     data = {}
     meta = {}
+
+    # Make YYYY/MM/DD into YYYY.MM.DD for easier parsing
+    ua = ua.gsub(DATE_MATCHER, '\1\2.\3.\4\5')
 
     split(ua).each do |part|
       part.strip!
@@ -76,14 +81,10 @@ class UATokenizer
 
 
   ##
-  # Splits the User-Agent String into meaningful pieces.
+  # Splits the User-Agent String into meaningful pieces,
+  # typically product-like sections.
 
   def self.split ua
-    ua = ua.dup
-
-    # Make YYYY/MM/DD into YYYY.MM.DD for easier parsing
-    ua.gsub!(DATE_MATCHER, '\1\2.\3.\4\5')
-
     if ua =~ NOSPACE_MATCHER
       # Handle UAs without spaces. Split on 0|A HP|Compaq.
       ua.gsub!(NOSPACE_DELIM_MATCHER, '\1;\2')
@@ -92,9 +93,7 @@ class UATokenizer
       ua.gsub!(UA_DELIM_MATCHER, '\1;\2')
     end
 
-    ua.sub!(SCR_MATCHER, ';\1;')
-
-    ua.split(UA_SPLIT_MATCHER)
+    ua.sub(SCR_MATCHER, ';\1;').split(UA_SPLIT_MATCHER)
   end
 
 
@@ -122,31 +121,40 @@ class UATokenizer
     parts.each_with_index do |part, i|
       last_of_many = parts.length > 1 && i+1 == parts.length
 
-      if version && !last_of_many
-        version &&= version.downcase
+      version ||= part and break if last_of_many
+
+      if version
+        version &&= version.sub(/\+$/,"").downcase
         tokens.each{|t| out[t] = version || out[t] || true }
         tokens  = []
         version = nil
       end
 
-      tokenize(part) do |t|
-        next if COMMON_TOKENS.include?(t)   ||
-                t.length > MAX_TOKEN_LENGTH ||
-                t =~ /^\d+$/
+      last_token = nil
 
+      tokenize(part) do |t|
         t = TOKEN_MAPS[t] || t
 
+        next if t.length > MAX_TOKEN_LENGTH
         version = t and next if !version && t =~ VERSION_MATCH
-        tokens << t
 
-        t
-      end unless last_of_many
+        if last_token && last_token != version
+          merge_token = "#{last_token}_#{t}"
+          if TOKEN_MAPS[merge_token]
+            t = TOKEN_MAPS[merge_token]
+            tokens.pop
+          else
+            tokens << merge_token
+          end
+        end
 
-      version = part and next if
-        (!version && last_of_many) || part =~ VERSION_MATCH
+        last_token = t
+
+        tokens << t unless COMMON_TOKENS.include?(t) || t =~ /^\d+$/
+      end
     end
 
-    version &&= version.downcase
+    version &&= version.sub(/\+$/,"").downcase
     tokens.each{|t| out[t] = version || out[t] || true }
 
     out
@@ -157,47 +165,39 @@ class UATokenizer
   # Normalizes and splits the String in potentially meaningful ways
   # and returns a hash map of :token => str.
   #   UATokenizer.tokenize("SAMSUNG-GT-S5620-ORANGE")
-  #   #=> ["samsung", "samsung_gt", "gt", "gt_s5620", "s5620", "s5620_orange", "orange"]
+  #   #=> ["samsung", "gt", "s5620", "orange"]
   #
   #   UATokenizer.tokenize("SonyEricssonCK15i")
-  #   #=> ["sony", "sony_ericsson", "ericsson", "ericsson_ck15i", "ck15i"]
+  #   #=> ["sony", "ericsson", "ck15i"]
   #
   #   UATokenizer.tokenize("Nokia2700c")
-  #   #=> ["nokia", "nokia_2700c", "2700c"]
+  #   #=> ["nokia", "2700c"]
   #
   #   UATokenizer.tokenize("iPhone")
   #   #=> ["iphone"]
   #
   #   UATokenizer.tokenize("HTC Desire HD A9191")
-  #   #=> ["htc", "htc_desire", "desire", "desire_hd", "hd", "hd_a9191", "a9191"]
+  #   #=> ["htc", "desire", "hd", "a9191"]
   #
   #   UATokenizer.tokenize("ZTE-Sydney-Orange")
-  #   #=> ["zte", "zte_sydney", "sydney", "sydney_orange", "orange"]
+  #   #=> ["zte", "sydney", "orange"]
 
   def self.tokenize str
     str = str.dup
 
-    2.times{ str.gsub!(/(\d)_(\d)/, '\1.\2') } # serialize version
-    TOKEN_MATCHERS.each{|k, regex| str.gsub!(regex, '\1_\2') }
+    # Serialize versions
+    2.times{ str.gsub!(/(\d)_(\d)/, '\1.\2') }
+
+    TOKEN_MATCHERS.each{|regex| str.gsub!(regex, '\1_\2') }
 
     parts = str.downcase.split(/[_\s\-\/:;]/)
     tokens = []
 
-    last = nil
     parts.each do |t|
       next unless t && !t.empty?
       t.gsub!(/([a-z])\W([a-z])/, '\1_\2')
-      t1 = block_given? ? yield(t) : t
-
-      if last && t !~ VERSION_MATCH && last !~ VERSION_MATCH
-        last = last.split("_", 2).last
-        nt = "#{last}_#{t1 || t}"
-        nt = yield nt if block_given?
-        tokens << nt if nt
-      end
-
-      last = t1 || nt || t
-      tokens << t1 if t1
+      yield(t) if block_given?
+      tokens << t
     end
 
     tokens
