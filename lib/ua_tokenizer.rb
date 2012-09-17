@@ -32,6 +32,7 @@ class UATokenizer
     /([A-Z]{3,})(\d)/
   ]
 
+  URL_MATCHER = /^https?:\/\//
   SEC_MATCHER = /^([NUI])$/
   LAN_MATCHER = /^([a-z]{2})(?:[\-_]([a-z]{2,3}))?$/i
   SCR_MATCHER = /((\d{2,4})[xX*](\d{2,4}))/
@@ -69,6 +70,10 @@ class UATokenizer
 
       when SEC_MATCHER
         meta[:security] = part
+        next
+
+      when URL_MATCHER
+        meta[:url] = part
         next
       end
 
@@ -219,7 +224,7 @@ class UATokenizer
   end
 
 
-  attr_accessor :localization, :security, :screen
+  attr_accessor :localization, :security, :screen, :url
 
   ##
   # Create a new UATokenizer instance from parsed User-Agent data.
@@ -229,6 +234,7 @@ class UATokenizer
     @screen       = meta[:screen]
     @localization = meta[:localization]
     @security     = meta[:security]
+    @url          = meta[:url]
     @tokens       = data
   end
 

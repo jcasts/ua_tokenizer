@@ -757,4 +757,8 @@ UCWEB Mobile"
     assert_equal true,  tokens.has?(:nokia)
     assert_equal false, tokens.has?(:nokia, ">=0")
   end
+
+=begin
+"Dalvik/1.4.0 (Linux; U; Android 2.3.5; SBM102SH Build/S0022)"
+=end
 end
