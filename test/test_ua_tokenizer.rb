@@ -219,7 +219,10 @@ class TestUaTokenizer < Test::Unit::TestCase
       "sony_ericsson"  =>"r3ac020",
       "ericsson"       =>"r3ac020",
       "ericsson_ck15i" =>"r3ac020",
-      "ck15i"          =>"r3ac020"
+      "ck15i"          =>"r3ac020",
+      "r3"             =>true,
+      "r3_ac020"       =>true,
+      "ac020"          =>true
     }
     assert_equal expected, map
 
@@ -232,15 +235,20 @@ class TestUaTokenizer < Test::Unit::TestCase
     assert_equal expected, map
 
     map = UATokenizer.parse_product "PalmSource/Palm-D061"
-    expected =
-      {"palm"=>"palm-d061", "source"=>"palm-d061", "palm_source"=>"palm-d061"}
+    expected = {
+      "palm"        =>"palm-d061",
+      "source"      =>"palm-d061",
+      "palm_source" =>"palm-d061",
+      "palm_d061"   =>true,
+      "d061"        =>true
+    }
     assert_equal expected, map
   end
 
 
   def test_parse_product_3part
     map = UATokenizer.parse_product "POLARIS/6.01/AMB"
-    assert_equal({"polaris"=>"6.01"}, map)
+    assert_equal({"polaris"=>"6.01", "amb" => true}, map)
 
     map = UATokenizer.parse_product "Opera Mini/3.1.9427/1724"
     expected = {
@@ -271,7 +279,8 @@ class TestUaTokenizer < Test::Unit::TestCase
       "vodafone"  =>"1.0",
       "lg"        =>"v10c",
       "lg_ku990i" =>"v10c",
-      "ku990i"    =>"v10c"
+      "ku990i"    =>"v10c",
+      "v10c"      =>true
     }
     assert_equal(expected, map)
   end
@@ -618,9 +627,11 @@ InfoPath.2) UCBrowser8.4.0.159/69/352 UNTRUSTED/1.0"
       "nokia"=>"2.0",
       "nokia_5300"=>"2.0",
       "profile"=>"midp-2.0",
+      "midp"=>"2.0",
       "configuration"=>"cldc-1.1",
       "mozilla"=>"4.0",
       "compatible"=>true,
+      "cldc"=>"1.1",
       "msie"=>"8.0",
       "windows"=>"6.1",
       "windows_nt"=>"6.1",

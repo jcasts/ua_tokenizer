@@ -123,7 +123,10 @@ class UATokenizer
     parts.each_with_index do |part, i|
       last_of_many = parts.length > 1 && i+1 == parts.length
 
-      version ||= part and break if last_of_many
+      if last_of_many
+        version ||= part
+        break if part =~ VERSION_MATCH
+      end
 
       if version
         version = version.downcase
