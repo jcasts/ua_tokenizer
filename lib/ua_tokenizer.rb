@@ -21,12 +21,10 @@ class UATokenizer
 
   VERSION_MATCH = /^(v?(\d+\.)+\d+|v\d+)$/i
 
-  MFOR = /(?:[Ff]or)?/
-
   TOKEN_MATCHERS = [
     # Non-lowercase first
-    %r{([A-Z](?:[A-Z]|\d+))#{MFOR}([a-z][^a-z]|[A-Z]{1,2}[a-z\d]{2,})},
-    # Lowercase ro pre-underscored first
+    %r{([A-Z](?:[A-Z]+?|\d+))([a-z]{1,2}[^a-z]|[A-Z][a-z\d]{2,}[^_\-]|[Ff]or)},
+    # Lowercase or pre-underscored first
     /(_[A-Z][a-z]+|[a-z]{3,})\.?([\dA-Z])/,
     # Suffix identification
     /(\d)([a-zA-Z]+\d)/,
@@ -41,7 +39,7 @@ class UATokenizer
   DATE_MATCHER          = %r{(^|\D)((?:19|20)\d{2})/?(0\d|1[0-2])/?([0-2]\d|3[01])(\D|$)}
   NOSPACE_MATCHER       = %r{\)/[a-zA-Z]|([^\s]+/){4,}}
   NOSPACE_DELIM_MATCHER = %r{([0-9A-Z])([A-Z][a-z])|\)/}
-  UA_DELIM_MATCHER      = %r{(/(?:[^\s;])+|[\)\]])[\s;]+(\w)}
+  UA_DELIM_MATCHER      = %r{(/(?:[^\s;])+|[\)\]]|^\w+)[\s;]+(\w)}
   UA_SPLIT_MATCHER      = /\s*[;()\[\],]+\s*/
 
   ##

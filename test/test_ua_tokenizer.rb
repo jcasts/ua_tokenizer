@@ -34,7 +34,7 @@ class TestUaTokenizer < Test::Unit::TestCase
     assert_equal expected, tokens
 
     tokens = UATokenizer.tokenize("FBForIPhone")
-    assert_equal ["fb", "iphone"], tokens
+    assert_equal ["fb", "for", "iphone"], tokens
 
     tokens = UATokenizer.tokenize("CriOS")
     assert_equal ["crios"], tokens
@@ -434,7 +434,7 @@ Opera Mobi/9.5; U; en) Samsung-SCHI910 PPC 240x400"
     assert_equal ["WebWatcher1.35"], arr
 
     arr = UATokenizer.split "T58 WAP Browser"
-    assert_equal ["T58 WAP Browser"], arr
+    assert_equal ["T58", "WAP Browser"], arr
   end
 
 
@@ -643,6 +643,64 @@ InfoPath.2) UCBrowser8.4.0.159/69/352 UNTRUSTED/1.0"
       "uc"=>"8.4.0.159",
       "uc_browser"=>"8.4.0.159",
       "untrusted"=>"1.0"
+    }
+
+    assert_equal expected, tokens.instance_variable_get("@tokens")
+  end
+
+
+  def test_astro36_opera
+    ua = "ASTRO36_TD/v3 MAUI/10A1032MP_ASTRO_W1052 Release/31.12.2010 \
+Browser/Opera Profile/MIDP-2.0 Configuration/CLDC-1.1 Sync/SyncClient1.1 \
+Opera/9.80 (MTK; Nucleus; Opera Mobi/4000; U; en-US) Presto/2.5.28 \
+Version/10.10"
+
+    tokens = UATokenizer.parse ua
+
+    assert_equal "v3", tokens[:astro_36]
+    assert_equal "v3", tokens[:td]
+
+    assert_equal "10a1032mp_astro_w1052", tokens[:MAUI]
+
+    assert_equal "4000",   tokens[:opera]
+    assert_equal "2.5.28", tokens[:presto]
+  end
+
+
+  def test_hd_mini_msie
+    ua = "HD_mini_T5555 Mozilla/4.0 (compatible; MSIE 6.0; Windows CE; \
+IEMobile 8.12; MSIEMobile 6.5)"
+
+    tokens = UATokenizer.parse ua
+
+    assert_equal true,   tokens[:hd_mini]
+    assert_equal true,   tokens[:t5555]
+    assert_equal "8.12", tokens[:ie]
+    assert_equal "8.12", tokens[:ie_mobile]
+    assert_equal "6.5",  tokens[:msie]
+    assert_equal "6.5",  tokens[:msie_mobile]
+  end
+
+
+  def test_parse_hp_ipaq
+    ua = "HPiPAQrw6815/1.0 Mozilla/4.0 (compatible; MSIE 4.01; Windows CE; PPC;
+240x320)"
+
+    tokens = UATokenizer.parse ua
+
+    expected = {
+      "hp"=>"1.0",
+      "hp_ipaq"=>"1.0",
+      "ipaq"=>"1.0",
+      "ipaq_rw6815"=>"1.0",
+      "rw6815"=>"1.0",
+      "mozilla"=>"4.0",
+      "compatible"=>true,
+      "msie"=>"4.01",
+      "windows"=>true,
+      "windows_ce"=>true,
+      "ce"=>true,
+      "ppc"=>true
     }
 
     assert_equal expected, tokens.instance_variable_get("@tokens")
