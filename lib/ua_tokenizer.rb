@@ -19,7 +19,7 @@ class UATokenizer
 
   MAX_TOKEN_LENGTH = 25
 
-  VERSION_MATCH = /^(v?(\d+\.)+\d+|v\d+)$/i
+  VERSION_MATCH = /^([a-z]?(\d+\.)+\d+[a-z]?|v\d+)$/i
 
   TOKEN_MATCHERS = [
     # Non-lowercase first
