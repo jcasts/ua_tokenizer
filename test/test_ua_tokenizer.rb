@@ -628,9 +628,9 @@ InfoPath.2) UCBrowser8.4.0.159/69/352 UNTRUSTED/1.0"
       "trident"=>"4.0",
       "slcc"=>true,
       "slcc_2"=>true,
-      ".net"=>"3.0.30729",
-      ".net_clr"=>"3.0.30729",
-      "clr"=>"3.0.30729",
+      ".net"=>"3.5.30729",
+      ".net_clr"=>"3.5.30729",
+      "clr"=>"3.5.30729",
       "media"=>"6.0",
       "media_center"=>"6.0",
       "center"=>"6.0",
@@ -662,7 +662,8 @@ Version/10.10"
 
     assert_equal "10a1032mp_astro_w1052", tokens[:MAUI]
 
-    assert_equal "4000",   tokens[:opera]
+    assert_equal "9.80",   tokens[:opera]
+    assert_equal "4000",   tokens[:opera_mobi]
     assert_equal "2.5.28", tokens[:presto]
   end
 

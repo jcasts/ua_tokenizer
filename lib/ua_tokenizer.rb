@@ -40,7 +40,7 @@ class UATokenizer
   NOSPACE_MATCHER       = %r{\)/[a-zA-Z]|([^\s]+/){4,}}
   NOSPACE_DELIM_MATCHER = %r{([0-9A-Z])([A-Z][a-z])|\)/}
   UA_DELIM_MATCHER      = %r{(/(?:[^\s;])+|[\)\]]|^\w+)[\s;]+(\w)}
-  UA_SPLIT_MATCHER      = /\s*[;()\[\],]+\s*/
+  UA_SPLIT_MATCHER      = /\s*[+;()\[\],]+\s*/
 
   ##
   # Parse the User-Agent String and return a UATokenizer instance.
@@ -61,7 +61,8 @@ class UATokenizer
         next
 
       when LAN_MATCHER
-        if !meta[:localization] || meta[:localization] && ($2 || $1.length < meta[:localization].length)
+        if !meta[:localization] || meta[:localization] &&
+        ($2 || $1.length < meta[:localization].length)
           meta[:localization] = ($2 ? "#{$1}-#{$2}" : $1).downcase
           next
         end
@@ -71,7 +72,10 @@ class UATokenizer
         next
       end
 
-      data.merge! parse_product(part)
+      parse_product(part) do |key, value|
+        data[key] = value if !data[key] || data[key] == true ||
+                              String === value && data[key] < value
+      end
     end
 
     new data, meta
@@ -122,8 +126,13 @@ class UATokenizer
       version ||= part and break if last_of_many
 
       if version
-        version &&= version.sub(/\+$/,"").downcase
-        tokens.each{|t| out[t] = version || out[t] || true }
+        version = version.downcase
+
+        tokens.each do |t|
+          out[t] = version if !out[t] || out[t] == true
+          yield t, version if block_given?
+        end
+
         tokens  = []
         version = nil
       end
@@ -152,8 +161,13 @@ class UATokenizer
       end
     end
 
-    version &&= version.sub(/\+$/,"").downcase
-    tokens.each{|t| out[t] = version || out[t] || true }
+    version &&= version.downcase
+    version ||= true
+
+    tokens.each do |t|
+      out[t] = version if !out[t] || out[t] == true
+      yield t, version if block_given?
+    end
 
     out
   end
