@@ -151,8 +151,8 @@ class TestUaTokenizer < Test::Unit::TestCase
     tokens = UATokenizer.tokenize("LG-KU990i")
     assert_equal ["lg", "ku990i"], tokens
 
-    tokens = UATokenizer.tokenize("LGC300")
-    assert_equal ["lg", "c300"], tokens
+    tokens = UATokenizer.tokenize("LG-LGC300")
+    assert_equal ["lg", "lgc", "300"], tokens
 
     tokens = UATokenizer.tokenize("LGPlayer")
     assert_equal ["lg", "player"], tokens

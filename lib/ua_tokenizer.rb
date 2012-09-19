@@ -23,7 +23,7 @@ class UATokenizer
 
   TOKEN_MATCHERS = [
     # Non-lowercase first
-    %r{([A-Z](?:[A-Z]+?|\d+))([a-z]{1,2}[^a-z]|[A-Z][a-z\d]{2,}[^_\-]|[Ff]or)},
+    %r{([A-Z](?:[A-Z]+?|\d+))([a-z]{1,2}[^a-z]|[A-Z][a-z]{2,}[^_\-]|[Ff]or)},
     # Lowercase or pre-underscored first
     /(_[A-Z][a-z]+|[a-z]{3,})\.?([\dA-Z])/,
     # Suffix identification
@@ -36,6 +36,7 @@ class UATokenizer
   SEC_MATCHER = /^([NUI])$/
   LAN_MATCHER = /^([a-z]{2})(?:[\-_]([a-z]{2,3}))?$/i
   SCR_MATCHER = /((\d{2,4})[xX*](\d{2,4}))/
+  #SERIAL_MATCHER = /[A-Z0-9]{4,}/
 
   DATE_MATCHER          = %r{(^|\D)((?:19|20)\d{2})/?(0\d|1[0-2])/?([0-2]\d|3[01])(\D|$)}
   NOSPACE_MATCHER       = %r{\)/[a-zA-Z]|([^\s]+/){4,}}
@@ -154,7 +155,8 @@ class UATokenizer
         version = t and next if !version && t =~ VERSION_MATCH
 
         if last_token && last_token != version
-          merge_token = "#{last_token}_#{t}"
+          merge_token = [last_token, t].join("_")
+
           if TOKEN_MAPS[merge_token]
             t = TOKEN_MAPS[merge_token]
             tokens.pop
