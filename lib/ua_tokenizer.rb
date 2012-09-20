@@ -24,7 +24,7 @@ class UATokenizer
 
   TOKEN_MATCHERS = [
     # Non-lowercase first
-    %r{([A-Z](?:[A-Z]+?|\d+))([a-z]{1,2}[^a-z]|[A-Z][a-z]{2,}[^_\-]|[Ff]or)},
+    %r{([A-Z](?:[A-Z]+?|\d+))([a-z]{1,2}[A-Z0-9]|[A-Z][a-z]{2,}[^_\-]|[Ff]or)},
     # Lowercase or pre-underscored first
     /(_[A-Z][a-z]+|[a-z]{3,})\.?([\dA-Z])/,
     # Dots between words

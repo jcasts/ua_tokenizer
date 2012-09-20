@@ -730,6 +730,19 @@ AppleWebKit/534.11+ (KHTML, like Gecko) Version/7.0.0.503 Mobile Safari/534.11+"
   end
 
 
+  def test_parse_wt19i
+    ua = "Mozilla/5.0 (Linux; U; Android 2.3.4; en-in; \
+SonyEricssonWT19i Build/4.0.2.A.0.58) AppleWebKit/533.1 (KHTML, like Gecko) \
+Version/4.0 Mobile Safari/533.1"
+
+    tokens = UATokenizer.parse ua
+
+    assert_equal "en-in", tokens.localization
+    assert_equal "4.0.2.a.0.58", tokens[:wt19i]
+    assert_equal "4.0.2.a.0.58", tokens[:sony_ericsson]
+  end
+
+
   def test_token_has_true
     ua = "Mozilla/5.0 (S60V5; U; Pt-br; Nokia5233)/UC Browser8.2.0.132/50/355/\
 UCWEB Mobile"
