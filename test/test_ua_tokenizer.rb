@@ -539,25 +539,6 @@ Configuration/CLDC-1.1) Gecko/20100401 S40OviBrowser/2.0.2.68.14"
   end
 
 
-  def test_token_has_true
-    ua = "Mozilla/5.0 (S60V5; U; Pt-br; Nokia5233)/UC Browser8.2.0.132/50/355/\
-UCWEB Mobile"
-
-    tokens = UATokenizer.parse ua
-
-    assert_equal true, tokens.has?(:mozilla)
-    assert_equal true, tokens.has?(:mozilla, "5.0")
-    assert_equal true, tokens.has?(:mozilla, "= 5.0")
-    assert_equal true, tokens.has?(:mozilla, "==5.0")
-    assert_equal true, tokens.has?(:mozilla, ">=5.0")
-    assert_equal true, tokens.has?(:mozilla, "<=5.0")
-    assert_equal true, tokens.has?(:mozilla, "<=6.0")
-    assert_equal true, tokens.has?(:mozilla, "<6.0")
-    assert_equal true, tokens.has?(:mozilla, ">4.9")
-    assert_equal true, tokens.has?(:uc_browser, ">8.2.0")
-  end
-
-
   def test_parse_lg
     ua = "Mozilla/5.0 (X11; Linux i686; U; en-US) Gecko/20081217 \
  Vision-Browser/8.1 301x200 LG VN530"
@@ -637,8 +618,7 @@ InfoPath.2) UCBrowser8.4.0.159/69/352 UNTRUSTED/1.0"
       "windows_nt"=>"6.1",
       "nt"=>"6.1",
       "trident"=>"4.0",
-      "slcc"=>true,
-      "slcc_2"=>true,
+      "slcc2"=>true,
       ".net"=>"3.5.30729",
       ".net_clr"=>"3.5.30729",
       "clr"=>"3.5.30729",
@@ -647,10 +627,7 @@ InfoPath.2) UCBrowser8.4.0.159/69/352 UNTRUSTED/1.0"
       "center"=>"6.0",
       "center_pc"=>"6.0",
       "pc"=>"6.0",
-      "info"=>true,
-      "info_path"=>true,
-      "path"=>true,
-      "path_2"=>true,
+      "infopath"=>"2",
       "uc"=>"8.4.0.159",
       "uc_browser"=>"8.4.0.159",
       "untrusted"=>"1.0"
@@ -719,6 +696,25 @@ IEMobile 8.12; MSIEMobile 6.5)"
   end
 
 
+  def test_parse_dot_separated_words
+    ua = "MOT-A953/Blur_Version.3.18.3.A953.AmericaMovil.en.MX Mozilla/5.0 \
+(Linux; U; Android 2.2.1; es-us; A953 Build/MILA2_U6_3.18.3) AppleWebKit/533.1 \
+(KHTML, like Gecko) Version/4.0 Mobile Safari/533.1"
+
+    tokens = UATokenizer.parse ua
+
+    assert_equal "3.18.3", tokens[:blur_version]
+    assert_equal "3.18.3", tokens[:America_Movil]
+    assert_equal "3.18.3", tokens[:A953]
+    assert_equal "3.18.3", tokens[:mila2]
+    assert_equal "3.18.3", tokens[:mila2_u6]
+    assert_equal "3.18.3", tokens[:u6]
+
+    assert_equal "U",     tokens.security
+    assert_equal "es-us", tokens.localization
+  end
+
+
   def test_parse_blackberry_mozilla
     ua = "Mozilla/5.0 (BlackBerry; U; BlackBerry 9900; en-GB) \
 AppleWebKit/534.11+ (KHTML, like Gecko) Version/7.0.0.503 Mobile Safari/534.11+"
@@ -734,6 +730,28 @@ AppleWebKit/534.11+ (KHTML, like Gecko) Version/7.0.0.503 Mobile Safari/534.11+"
   end
 
 
+  def test_token_has_true
+    ua = "Mozilla/5.0 (S60V5; U; Pt-br; Nokia5233)/UC Browser8.2.0.132/50/355/\
+UCWEB Mobile"
+
+    tokens = UATokenizer.parse ua
+
+    assert_equal true, tokens.has?(:mozilla)
+    assert_equal true, tokens.has?(:mozilla, "5.0")
+    assert_equal true, tokens.has?(:mozilla, "= 5.0")
+    assert_equal true, tokens.has?(:mozilla, "==5.0")
+    assert_equal true, tokens.has?(:mozilla, ">=5.0")
+    assert_equal true, tokens.has?(:mozilla, "<=5.0")
+    assert_equal true, tokens.has?(:mozilla, "<=6.0")
+    assert_equal true, tokens.has?(:mozilla, "<6.0")
+    assert_equal true, tokens.has?(:mozilla, ">4.9")
+    assert_equal true, tokens.has?(:uc_browser, ">8.2.0")
+    assert_equal true, tokens.has?(:uc_browser, "~>8.1")
+    assert_equal true, tokens.has?(:uc_browser, "~>7")
+    assert_equal true, tokens.has?(:uc_browser, "~>8.2.0.100")
+  end
+
+
   def test_token_has_false
     ua = "Mozilla/5.0 (S60V5; U; Pt-br; Nokia5233)/UC Browser8.2.0.132/50/355/\
 UCWEB Mobile"
@@ -746,6 +764,9 @@ UCWEB Mobile"
     assert_equal false, tokens.has?(:mozilla, "==4.0")
     assert_equal false, tokens.has?(:mozilla, "<=4.0")
     assert_equal false, tokens.has?(:mozilla, ">5.9")
+    assert_equal false, tokens.has?(:uc_browser, "~>8.2.0.133")
+    assert_equal false, tokens.has?(:uc_browser, "~>7.1")
+    assert_equal false, tokens.has?(:uc_browser, "~>9")
   end
 
 
@@ -757,8 +778,4 @@ UCWEB Mobile"
     assert_equal true,  tokens.has?(:nokia)
     assert_equal false, tokens.has?(:nokia, ">=0")
   end
-
-=begin
-"Dalvik/1.4.0 (Linux; U; Android 2.3.5; SBM102SH Build/S0022)"
-=end
 end

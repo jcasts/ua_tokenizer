@@ -5,6 +5,7 @@ class UATokenizer
     'black_berry' => 'blackberry',
     'crios'       => 'chrome',
     'fb'          => 'facebook',
+    'info_path'   => 'infopath',
     'lge'         => 'lg',
     'mot'         => 'motorolla',
     's40'         => 'series_40',
@@ -19,20 +20,22 @@ class UATokenizer
 
   MAX_TOKEN_LENGTH = 25
 
-  VERSION_MATCH = /^([a-z]?(\d+\.)+\d+[a-z]?|v\d+)$/i
+  VERSION_MATCH = /^([a-z]?(\d+\.)+\d+[a-z]?|v\d+|\d)$/i
 
   TOKEN_MATCHERS = [
     # Non-lowercase first
     %r{([A-Z](?:[A-Z]+?|\d+))([a-z]{1,2}[^a-z]|[A-Z][a-z]{2,}[^_\-]|[Ff]or)},
     # Lowercase or pre-underscored first
     /(_[A-Z][a-z]+|[a-z]{3,})\.?([\dA-Z])/,
+    # Dots between words
+    /([a-z]{3,})\.([a-z])/i,
     # Suffix identification
-    /(\d)([a-zA-Z]+\d)/,
+    /(\d)\.?([a-zA-Z]+\d|[a-zA-Z]{2,})/,
     # Nprefix identification
-    /([A-Z]{3,})(\d)/
+    /([A-Z]{3,})[^\w]?(\d[^_a-z])/
   ]
 
-  URL_MATCHER = /^https?:\/\//
+  URL_MATCHER = /^https?:\/\/|[^\s]+\.(com|net|us|net|org)$/
   SEC_MATCHER = /^([NUI])$/
   LAN_MATCHER = /^([a-z]{2})(?:[\-_]([a-z]{2,3}))?$/i
   SCR_MATCHER = /((\d{2,4})[xX*](\d{2,4}))/
@@ -42,7 +45,7 @@ class UATokenizer
   NOSPACE_MATCHER       = %r{\)/[a-zA-Z]|([^\s]+/){4,}}
   NOSPACE_DELIM_MATCHER = %r{([0-9A-Z])([A-Z][a-z])|\)/}
   UA_DELIM_MATCHER      = %r{(/(?:[^\s;])+|[\)\]]|^\w+)[\s;]+(\w)}
-  UA_SPLIT_MATCHER      = /\s*[+;()\[\],]+\s*/
+  UA_SPLIT_MATCHER      = /\s*[+;()\[\]]+\s*/
 
   ##
   # Parse the User-Agent String and return a UATokenizer instance.
@@ -79,12 +82,33 @@ class UATokenizer
       end
 
       parse_product(part) do |key, value|
-        data[key] = value if !data[key] || data[key] == true ||
-                              String === value && data[key] < value
+        data[key] = get_version(data[key], value)
       end
     end
 
     new data, meta
+  end
+
+
+  ##
+  # Compare string versions and return the largest one.
+
+  def self.get_version v1, v2
+    default = true
+    return default unless v1 || v2
+
+    return v1 || default unless v2 && v2 != default
+    return v2 || default unless v1 && v1 != default
+
+    if v1 =~ /^\d/ && v2 =~ /^\d/
+      v1 < v2 ? v2 : v1
+    elsif v1 =~ /^\d/
+      v1
+    elsif v2 =~ /^\d/
+      v2
+    else
+      v1 < v2 ? v2 : v1
+    end
   end
 
 
@@ -208,11 +232,11 @@ class UATokenizer
     str = str.dup
 
     # Serialize versions
-    2.times{ str.gsub!(/(\d)_(\d)/, '\1.\2') }
+    2.times{ str.gsub!(/([^a-z]\d)[_,]\s?(\d)/i, '\1.\2') }
 
     TOKEN_MATCHERS.each{|regex| str.gsub!(regex, '\1_\2') }
 
-    parts = str.downcase.split(/[_\s\-\/:;]/)
+    parts = str.downcase.split(/[_\s\-\/:;,]/)
     tokens = []
 
     parts.each do |t|
@@ -252,23 +276,36 @@ class UATokenizer
   ##
   # Check if a given token is available with an optional version string.
   #   tokens.has?('mozilla', '>=5.0')
+  #   tokens.has?('mozilla', '~>5.0')
 
   def has? name, version=nil
     token_version = self[name]
+
     return !!token_version unless version
     return false           unless String === token_version
 
     op = '=='
     version = version.strip
 
-    if version =~ /^([><=]=?)/
+    if version =~ /^([><=]=?|~>)/
       op = $1
       version = version[op.length..-1].strip
     end
 
     op = '==' if op == '='
 
-    token_version.send(op, version)
+    if op == '~>'
+      v_ary = version.split(".")
+      return token_version >= version if v_ary.length < 2
+
+      v_ary[-1] = '0'
+      v_ary[-2] = v_ary[-2].next
+      next_version = v_ary.join(".")
+      token_version >= version && token_version < next_version
+
+    else
+      token_version.send(op, version)
+    end
   end
 
 

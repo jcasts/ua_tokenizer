@@ -45,7 +45,9 @@ attributes:
 Some helper methods make checking token versions easier, assuming the
 previous example:
 
+  tokens.has?(:gecko)                   #=> true
   tokens.has?(:gecko,   ">=2005.01.10") #=> true
+  tokens.has?(:gecko,   "~>2005.01")    #=> true
   tokens.has?(:mozilla, "<5.0")         #=> false
   tokens.has?(:linux,   ">1.0")         #=> false (linux token has no version)
 
@@ -61,6 +63,7 @@ This mapping may be modified at need and is defined as such:
     'black_berry' => 'blackberry',
     'crios'       => 'chrome',
     'fb'          => 'facebook',
+    'info_path'   => 'infopath',
     'lge'         => 'lg',
     'mot'         => 'motorolla',
     's40'         => 'series_40',
